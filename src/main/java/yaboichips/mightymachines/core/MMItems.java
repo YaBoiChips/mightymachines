@@ -29,6 +29,15 @@ public class MMItems {
         }
     };
 
+    public static final Item RUBY_ORE = createBlockItem(MMBlocks.RUBY_ORE, new Item.Properties().tab(TAB));
+    public static final Item AMETHYST_ORE = createBlockItem(MMBlocks.AMETHYST_ORE, new Item.Properties().tab(TAB));
+    public static final Item SAPPHIRE_ORE = createBlockItem(MMBlocks.SAPPHIRE_ORE, new Item.Properties().tab(TAB));
+    public static final Item TOPAZ_ORE = createBlockItem(MMBlocks.TOPAZ_ORE, new Item.Properties().tab(TAB));
+    public static final Item OPAL_ORE = createBlockItem(MMBlocks.OPAL_ORE, new Item.Properties().tab(TAB));
+    public static final Item AMBER_ORE = createBlockItem(MMBlocks.AMBER_ORE, new Item.Properties().tab(TAB));
+    public static final Item ONYX_ORE = createBlockItem(MMBlocks.ONYX_ORE, new Item.Properties().tab(TAB));
+    public static final Item PYRITE_ORE = createBlockItem(MMBlocks.PYRITE_ORE, new Item.Properties().tab(TAB));
+
     public static Item createItem(Item item, String id) {
         return createItem(item, MightyMachines.createResource(id));
     }
