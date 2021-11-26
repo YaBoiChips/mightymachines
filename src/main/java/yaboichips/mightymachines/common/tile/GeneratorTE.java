@@ -121,7 +121,11 @@ public class GeneratorTE extends RandomizableContainerBlockEntity implements IEn
     }
 
     //Controllers
-    public static void tick(Level world, BlockPos p_155109_, BlockState p_155110_, GeneratorTE tile) {
+    public static void tick(Level world, BlockPos p_155109_, BlockState state, GeneratorTE tile) {
+    }
+
+    public static void generateEnergy(Level world, BlockPos p_155109_, BlockState state, GeneratorTE tile){
+
     }
 
 

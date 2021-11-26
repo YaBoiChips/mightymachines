@@ -15,7 +15,7 @@ import yaboichips.mightymachines.util.BlockEntityPacketHandler;
 public class MixinClientPlayNetHandler {
 
     @Inject(method = "handleBlockEntityData", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundBlockEntityDataPacket;getType()I"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void byg_ApplyPacketRead(ClientboundBlockEntityDataPacket packet, CallbackInfo ci, BlockPos blockEntityPos, BlockEntity blockEntity) {
+    private void mm_ApplyPacketRead(ClientboundBlockEntityDataPacket packet, CallbackInfo ci, BlockPos blockEntityPos, BlockEntity blockEntity) {
         if (blockEntity instanceof BlockEntityPacketHandler) {
             ((BlockEntityPacketHandler) blockEntity).handleClientPacketNoTypeCheck(packet);
         }

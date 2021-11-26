@@ -1,9 +1,11 @@
 package yaboichips.mightymachines;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +18,9 @@ import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import yaboichips.mightymachines.core.MMBlockEntities;
 import yaboichips.mightymachines.core.MMBlocks;
+import yaboichips.mightymachines.core.MMContainers;
 import yaboichips.mightymachines.core.MMItems;
 
 import javax.annotation.Nonnull;
@@ -71,21 +75,39 @@ public class MightyMachines {
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
-            LOGGER.info("MM: HELLO from Register Block");
+            LOGGER.info("MM: HELLO from Register Blocks");
             MMBlocks.init();
             MMBlocks.blocks.forEach(block -> event.getRegistry().register(block));
             MMBlocks.blocks.clear();
             MMBlocks.blocks = null;
-            LOGGER.info("MM: blocks registered");
+            LOGGER.info("MM: Blocks egistered");
         }
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
-            LOGGER.info("MM: HELLO from Register Item");
+            LOGGER.info("MM: HELLO from Register Items");
             MMItems.init();
             MMItems.items.forEach(item -> event.getRegistry().register(item));
             MMItems.items.clear();
             MMItems.items = null;
-            LOGGER.info("MM: item registered");
+            LOGGER.info("MM: Items registered");
+        }
+        @SubscribeEvent
+        public static void onTileRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {
+            LOGGER.info("MM: HELLO from Register Block Entities");
+            MMBlockEntities.init();
+            MMBlockEntities.blockentity.forEach(blockentity -> event.getRegistry().register(blockentity));
+            MMBlockEntities.blockentity.clear();
+            MMBlockEntities.blockentity = null;
+            LOGGER.info("MM: Block Entities registered");
+        }
+        @SubscribeEvent
+        public static void onMenuRegistry(final RegistryEvent.Register<MenuType<?>> event) {
+            LOGGER.info("MM: HELLO from Register Menus");
+            MMContainers.init();
+            MMContainers.containers.forEach(item -> event.getRegistry().register(item));
+            MMContainers.containers.clear();
+            MMContainers.containers = null;
+            LOGGER.info("MM: Menus Registered");
         }
     }
 }
