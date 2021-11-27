@@ -17,9 +17,9 @@ public class MMContainers {
     public static final MenuType<GeneratorMenu> GENERATOR = register("generator", GeneratorMenu::new);
 
 
-    private static <T extends AbstractContainerMenu> MenuType<T> register(String key, MenuType.MenuSupplier<T> builder) {
-        MenuType<T> containerType = MenuTypeAccess.create(builder);
-        Registry.register(Registry.MENU, new ResourceLocation(MightyMachines.MOD_ID, key), containerType);
+    private static <T extends AbstractContainerMenu> MenuType<T> register(String id, MenuType.MenuSupplier<T> builder) {
+        MenuType<T> containerType = new MenuType<>(builder);
+        containerType.setRegistryName(MightyMachines.createResource(id));
         containers.add(containerType);
         return containerType;
     }

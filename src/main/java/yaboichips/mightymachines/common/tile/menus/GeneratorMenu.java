@@ -5,25 +5,24 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import yaboichips.mightymachines.core.MMContainers;
 
 public class GeneratorMenu extends AbstractContainerMenu {
 
     public final Container inventory;
-    private final ContainerData fuelTime;
 
     public GeneratorMenu(int windowId, Inventory playerInv) {
-        this(windowId, playerInv, new SimpleContainer(1), new SimpleContainerData(1));
+        this(windowId, playerInv, new SimpleContainer(1));
     }
-    public GeneratorMenu(int windowId, Inventory playerInv, Container inventory, ContainerData fuelTime) {
+    public GeneratorMenu(int windowId, Inventory playerInv, Container inventory) {
         super(MMContainers.GENERATOR, windowId);
-        this.fuelTime = fuelTime;
+        checkContainerSize(inventory, 1);
         this.inventory = inventory;
+        inventory.startOpen(playerInv.player);
 
-        this.addSlot(new Slot(inventory, 1, 79, 58));
+        this.addSlot(new Slot(inventory, 0, 81, 36));
 
         // Main Inventory
         int startX = 8;
@@ -39,15 +38,37 @@ public class GeneratorMenu extends AbstractContainerMenu {
         for (int column = 0; column < 9; column++) {
             this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 142));
         }
-
-        this.addDataSlots(fuelTime);
     }
     @Override
     public boolean stillValid(Player player) {
         return this.inventory.stillValid(player);
     }
 
-    public ContainerData getFuelTime() {
-        return fuelTime;
+    @Override
+    public ItemStack quickMoveStack(Player playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
+            if (index < 1) {
+                if (!this.moveItemStackTo(itemstack1, 1, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+                return ItemStack.EMPTY;
+            }
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+        return itemstack;
     }
+
+    public void removed(Player playerIn) {
+        super.removed(playerIn);
+    }
+
 }

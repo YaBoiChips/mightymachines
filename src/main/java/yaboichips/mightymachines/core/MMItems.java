@@ -25,7 +25,7 @@ public class MMItems {
 
         @Override
         public ResourceLocation getBackgroundImage() {
-            return new ResourceLocation("minecraft", "textures/gui/container/creative_inventory/tab_item_search.png");
+            return new ResourceLocation("minecraft", "assets/mightymachines/textures/gui/container/creative_inventory/tab_item_search.png");
         }
     };
 
@@ -37,6 +37,26 @@ public class MMItems {
     public static final Item AMBER_ORE = createBlockItem(MMBlocks.AMBER_ORE, new Item.Properties().tab(TAB));
     public static final Item ONYX_ORE = createBlockItem(MMBlocks.ONYX_ORE, new Item.Properties().tab(TAB));
     public static final Item PYRITE_ORE = createBlockItem(MMBlocks.PYRITE_ORE, new Item.Properties().tab(TAB));
+    public static final Item THALLIUM_ORE = createBlockItem(MMBlocks.THALLIUM_ORE, new Item.Properties().tab(TAB));
+    public static final Item BAUXITE_ORE = createBlockItem(MMBlocks.BAUXITE_ORE, new Item.Properties().tab(TAB));
+    public static final Item TIN_ORE = createBlockItem(MMBlocks.TIN_ORE, new Item.Properties().tab(TAB));
+
+    public static final Item RUBY = createItem(new Item(new Item.Properties().tab(TAB)), "ruby");
+    public static final Item AMETHYST = createItem(new Item(new Item.Properties().tab(TAB)), "amethyst");
+    public static final Item SAPPHIRE = createItem(new Item(new Item.Properties().tab(TAB)), "sapphire");
+    public static final Item TOPAZ = createItem(new Item(new Item.Properties().tab(TAB)), "topaz");
+    public static final Item OPAL = createItem(new Item(new Item.Properties().tab(TAB)), "opal");
+    public static final Item AMBER = createItem(new Item(new Item.Properties().tab(TAB)), "amber");
+    public static final Item ONYX = createItem(new Item(new Item.Properties().tab(TAB)), "onyx");
+    public static final Item PYRITE = createItem(new Item(new Item.Properties().tab(TAB)), "pyrite");
+    public static final Item THALLIUM_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_ingot");
+    public static final Item BAUXITE_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "bauxite_ingot");
+    public static final Item TIN_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "tin_ingot");
+    public static final Item THALLIUM_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_dust");
+    public static final Item ENERGETIC_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "energetic_dust");
+
+
+    public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
 
     public static Item createItem(Item item, String id) {
         return createItem(item, MightyMachines.createResource(id));

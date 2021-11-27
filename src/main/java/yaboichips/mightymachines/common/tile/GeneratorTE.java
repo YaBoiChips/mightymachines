@@ -1,29 +1,49 @@
 package yaboichips.mightymachines.common.tile;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import yaboichips.mightymachines.common.blocks.GeneratorBlock;
+import yaboichips.mightymachines.common.tile.menus.GeneratorMenu;
 import yaboichips.mightymachines.core.MMBlockEntities;
+import yaboichips.mightymachines.core.MMItems;
 import yaboichips.mightymachines.util.BlockEntityPacketHandler;
+
+import javax.annotation.Nonnull;
 
 public class GeneratorTE extends RandomizableContainerBlockEntity implements IEnergyStorage, BlockEntityPacketHandler {
     public GeneratorTE(BlockPos pos, BlockState state) {
         super(MMBlockEntities.GENERATOR, pos, state);
     }
 
+    private NonNullList<ItemStack> contents = NonNullList.withSize(1, ItemStack.EMPTY);
+    private final IItemHandlerModifiable items = createHandler();
+    private LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
+    protected int numPlayersUsing;
+
     public int fuel;
     public int cooldown;
     public int energy;
-
 
     //Energy
     @Override
@@ -58,28 +78,91 @@ public class GeneratorTE extends RandomizableContainerBlockEntity implements IEn
 
     //Container
     @Override
-    protected NonNullList<ItemStack> getItems() {
-        return null;
+    public NonNullList<ItemStack> getItems() {
+        return this.contents;
     }
 
     @Override
-    protected void setItems(NonNullList<ItemStack> p_59625_) {
-
+    protected void setItems(NonNullList<ItemStack> itemsIn) {
+        this.contents = itemsIn;
     }
 
     @Override
     protected Component getDefaultName() {
-        return null;
+        return new TranslatableComponent("container.generator_container");
     }
 
     @Override
-    protected AbstractContainerMenu createMenu(int p_58627_, Inventory p_58628_) {
-        return null;
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
+        return new GeneratorMenu(id, player, this);
     }
 
     @Override
     public int getContainerSize() {
-        return 0;
+        return 1;
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int type) {
+        if (id == 1) {
+            this.numPlayersUsing = type;
+            return true;
+        } else {
+            return super.triggerEvent(id, type);
+        }
+    }
+
+    @Override
+    public void startOpen(Player player) {
+        if (!player.isSpectator()) {
+            if (this.numPlayersUsing < 0) {
+                this.numPlayersUsing = 0;
+            }
+            ++this.numPlayersUsing;
+            this.onOpenOrClose();
+        }
+    }
+
+    @Override
+    public void stopOpen(Player player) {
+        if (!player.isSpectator()) {
+            --this.numPlayersUsing;
+            this.onOpenOrClose();
+        }
+    }
+
+    protected void onOpenOrClose() {
+        Block block = this.getBlockState().getBlock();
+        if (block instanceof GeneratorBlock) {
+            this.level.blockEvent(this.worldPosition, block, 1, this.numPlayersUsing);
+            this.level.updateNeighborsAt(this.worldPosition, block);
+        }
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nonnull Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return itemHandler.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+        return super.getCapability(cap);
+    }
+
+    private IItemHandlerModifiable createHandler() {
+        return new InvWrapper(this);
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (itemHandler != null) {
+            itemHandler.invalidate();
+        }
     }
 
     //nbt
@@ -117,17 +200,40 @@ public class GeneratorTE extends RandomizableContainerBlockEntity implements IEn
         this.setFuel(compound.getInt("Fuel"));
         this.setCooldown(compound.getInt("Cooldown"));
         this.setEnergy(compound.getInt("Energy"));
-
     }
 
     //Controllers
     public static void tick(Level world, BlockPos p_155109_, BlockState state, GeneratorTE tile) {
+        generateEnergy(world, tile);
+        fuelGenerator(world, tile);
+        System.out.println(tile.getEnergy());
     }
 
-    public static void generateEnergy(Level world, BlockPos p_155109_, BlockState state, GeneratorTE tile){
-
+    public static void generateEnergy(Level world, GeneratorTE tile){
+        if (world.isClientSide) return;
+        if (tile.hasFuel()){
+            tile.setEnergy(tile.getEnergy() + 10);
+            int i = world.getRandom().nextInt(16);
+            world.playLocalSound(tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 1, 1, true);
+            if (i == 10){
+                tile.setFuel(tile.getFuel() - 1);
+            }
+        }
     }
 
+    public static void fuelGenerator(Level world, GeneratorTE tile){
+        if (world.isClientSide) return;
+        ItemStack fuelItem = tile.getItem(0);
+        if (fuelItem.getItem() == MMItems.ENERGETIC_DUST && !tile.hasFuel()){
+            tile.setFuel(10);
+            fuelItem.shrink(1);
+        }
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 64;
+    }
 
     //getters/setters
     public int getFuel() {
@@ -154,4 +260,7 @@ public class GeneratorTE extends RandomizableContainerBlockEntity implements IEn
         this.energy = energy;
     }
 
+    public boolean hasFuel(){
+        return getFuel() > 0;
+    }
 }
