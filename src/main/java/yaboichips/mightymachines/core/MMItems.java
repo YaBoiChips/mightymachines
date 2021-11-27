@@ -47,6 +47,20 @@ public class MMItems {
     public static final Item THALLIUM_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_dust");
     public static final Item ENERGETIC_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "energetic_dust");
 
+    public static final Item THALLIUM_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_plate");
+    public static final Item BAUXITE_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "bauxite_plate");
+    public static final Item TIN_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "tin_plate");
+    public static final Item IRON_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "iron_plate");
+    public static final Item GOLD_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "gold_plate");
+    public static final Item COPPER_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "copper_plate");
+
+    public static final Item THALLIUM_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_gear");
+    public static final Item BAUXITE_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "bauxite_gear");
+    public static final Item TIN_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "tin_gear");
+    public static final Item IRON_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "iron_gear");
+    public static final Item GOLD_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "gold_gear");
+    public static final Item COPPER_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "copper_gear");
+
     public static final Item JETPACK = createItem(new Jetpack(ArmorMaterials.IRON, EquipmentSlot.CHEST, new Item.Properties().tab(TAB)), "jetpack");
 
     public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
