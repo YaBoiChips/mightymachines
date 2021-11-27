@@ -22,10 +22,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import yaboichips.mightymachines.common.tile.screens.GeneratorScreen;
-import yaboichips.mightymachines.core.MMBlockEntities;
-import yaboichips.mightymachines.core.MMBlocks;
-import yaboichips.mightymachines.core.MMContainers;
-import yaboichips.mightymachines.core.MMItems;
+import yaboichips.mightymachines.core.*;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Collectors;
@@ -50,6 +47,7 @@ public class MightyMachines {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         MenuScreens.register(MMContainers.GENERATOR, GeneratorScreen::new);
+        MMKeybinds.register();
     }
 
     private void setup(final FMLCommonSetupEvent event) {

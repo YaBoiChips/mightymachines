@@ -2,9 +2,11 @@ package yaboichips.mightymachines.core;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import yaboichips.mightymachines.MightyMachines;
+import yaboichips.mightymachines.common.items.Jetpack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,7 @@ public class MMItems {
     public static final Item THALLIUM_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_dust");
     public static final Item ENERGETIC_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "energetic_dust");
 
+    public static final Item JETPACK = createItem(new Jetpack(ArmorMaterials.IRON, EquipmentSlot.CHEST, new Item.Properties().tab(TAB)), "jetpack");
 
     public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
 
