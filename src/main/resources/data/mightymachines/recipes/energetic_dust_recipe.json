@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "mightymachines:thallium_dust"
+        },
+        {
+            "item": "minecraft:redstone"
+        },
+        {
+            "item": "minecraft:glowstone_dust"
+        }
+    ],
+    "result": {
+        "item": "mightymachines:energetic_dust",
+        "count": 6
+    }
+}

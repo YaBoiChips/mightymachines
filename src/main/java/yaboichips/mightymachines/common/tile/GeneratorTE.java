@@ -206,17 +206,18 @@ public class GeneratorTE extends RandomizableContainerBlockEntity implements IEn
     public static void tick(Level world, BlockPos p_155109_, BlockState state, GeneratorTE tile) {
         generateEnergy(world, tile);
         fuelGenerator(world, tile);
-        System.out.println(tile.getEnergy());
     }
 
     public static void generateEnergy(Level world, GeneratorTE tile){
         if (world.isClientSide) return;
         if (tile.hasFuel()){
-            tile.setEnergy(tile.getEnergy() + 10);
-            int i = world.getRandom().nextInt(16);
-            world.playLocalSound(tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 1, 1, true);
-            if (i == 10){
-                tile.setFuel(tile.getFuel() - 1);
+            if(tile.getEnergy() < tile.getMaxEnergyStored()) {
+                tile.setEnergy(tile.getEnergy() + 10);
+                int i = world.getRandom().nextInt(16);
+                world.playLocalSound(tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 1, 1, true);
+                if (i == 10) {
+                    tile.setFuel(tile.getFuel() - 1);
+                }
             }
         }
     }
@@ -225,8 +226,10 @@ public class GeneratorTE extends RandomizableContainerBlockEntity implements IEn
         if (world.isClientSide) return;
         ItemStack fuelItem = tile.getItem(0);
         if (fuelItem.getItem() == MMItems.ENERGETIC_DUST && !tile.hasFuel()){
-            tile.setFuel(10);
-            fuelItem.shrink(1);
+            if(tile.getEnergy() < tile.getMaxEnergyStored()) {
+                tile.setFuel(10);
+                fuelItem.shrink(1);
+            }
         }
     }
 

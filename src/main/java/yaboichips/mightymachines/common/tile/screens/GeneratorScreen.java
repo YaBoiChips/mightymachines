@@ -11,7 +11,7 @@ import yaboichips.mightymachines.common.tile.menus.GeneratorMenu;
 
 public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(MightyMachines.MOD_ID, "assets/mightymachines/textures/gui/generator.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(MightyMachines.MOD_ID, "textures/gui/generator.png");
 
 
     public GeneratorScreen(GeneratorMenu screenContainer, Inventory inv, Component titleIn) {

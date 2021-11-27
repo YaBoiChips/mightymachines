@@ -19,16 +19,6 @@ public class MMItems {
         public ItemStack makeIcon() {
             return new ItemStack(Items.IRON_INGOT);
         }
-
-        @Override
-        public boolean hasSearchBar() {
-            return true;
-        }
-
-        @Override
-        public ResourceLocation getBackgroundImage() {
-            return new ResourceLocation("minecraft", "assets/mightymachines/textures/gui/container/creative_inventory/tab_item_search.png");
-        }
     };
 
     public static final Item RUBY_ORE = createBlockItem(MMBlocks.RUBY_ORE, new Item.Properties().tab(TAB));
