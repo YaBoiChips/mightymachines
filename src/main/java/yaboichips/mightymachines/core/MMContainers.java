@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import yaboichips.mightymachines.MightyMachines;
 import yaboichips.mightymachines.common.tile.menus.GeneratorMenu;
+import yaboichips.mightymachines.common.tile.menus.SmasherMenu;
 import yaboichips.mightymachines.mixin.MenuTypeAccess;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class MMContainers {
     public static List<MenuType<?>> containers = new ArrayList<>();
 
     public static final MenuType<GeneratorMenu> GENERATOR = register("generator", GeneratorMenu::new);
+    public static final MenuType<SmasherMenu> SMASHER = register("smasher", SmasherMenu::new);
+
 
 
     private static <T extends AbstractContainerMenu> MenuType<T> register(String id, MenuType.MenuSupplier<T> builder) {

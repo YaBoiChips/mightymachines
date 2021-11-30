@@ -4,6 +4,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import yaboichips.mightymachines.common.tile.screens.GeneratorScreen;
+import yaboichips.mightymachines.common.tile.screens.SmasherScreen;
 import yaboichips.mightymachines.core.*;
 
 import javax.annotation.Nonnull;
@@ -47,6 +49,7 @@ public class MightyMachines {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         MenuScreens.register(MMContainers.GENERATOR, GeneratorScreen::new);
+        MenuScreens.register(MMContainers.SMASHER, SmasherScreen::new);
         MMKeybinds.register();
     }
 
@@ -117,6 +120,15 @@ public class MightyMachines {
             MMContainers.containers.clear();
             MMContainers.containers = null;
             LOGGER.info("MM: Menus Registered");
+        }
+        @SubscribeEvent
+        public static void onRecipeRegistry(final RegistryEvent.Register<RecipeSerializer<?>> event) {
+            LOGGER.info("MM: HELLO from Register Recipes");
+            MMRecipeSerializers.init();
+            MMRecipeSerializers.serializers.forEach(serializer -> event.getRegistry().register(serializer));
+            MMRecipeSerializers.serializers.clear();
+            MMRecipeSerializers.serializers = null;
+            LOGGER.info("MM: Recipes Registered");
         }
     }
 }

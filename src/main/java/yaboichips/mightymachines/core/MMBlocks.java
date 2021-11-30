@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import yaboichips.mightymachines.MightyMachines;
 import yaboichips.mightymachines.common.blocks.GeneratorBlock;
+import yaboichips.mightymachines.common.blocks.SmasherBlock;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class MMBlocks {
     public static final Block TIN_ORE = createOreBlock("tin_ore");
 
     public static final Block GENERATOR = registerBlock("generator", new GeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final Block SMASHER = registerBlock("smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+
 
     static @Nonnull Block createOreBlock(String id) {
         Block stone = new Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE));

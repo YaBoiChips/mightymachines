@@ -61,9 +61,13 @@ public class MMItems {
     public static final Item GOLD_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "gold_gear");
     public static final Item COPPER_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "copper_gear");
 
+    public static final Item CRANK = createItem(new Item(new Item.Properties().tab(TAB)), "crank");
+
     public static final Item JETPACK = createItem(new Jetpack(ArmorMaterials.IRON, EquipmentSlot.CHEST, new Item.Properties().tab(TAB)), "jetpack");
 
     public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
+    public static final Item SMASHER = createBlockItem(MMBlocks.SMASHER, new Item.Properties().tab(TAB));
+
 
     public static Item createItem(Item item, String id) {
         return createItem(item, MightyMachines.createResource(id));
