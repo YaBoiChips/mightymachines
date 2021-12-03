@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:smashing",
+  "base": {
+    "item": "minecraft:tin_ingot"
+  },
+
+  "result": {
+    "item": "mightymachines:tin_plate"
+  }
+}

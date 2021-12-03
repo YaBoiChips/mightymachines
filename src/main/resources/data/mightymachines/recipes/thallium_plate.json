@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:smashing",
+  "base": {
+    "item": "minecraft:thallium_ingot"
+  },
+
+  "result": {
+    "item": "mightymachines:thallium_plate"
+  }
+}

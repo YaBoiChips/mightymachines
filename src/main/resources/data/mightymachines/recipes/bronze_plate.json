@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:smashing",
+  "base": {
+    "item": "minecraft:bronze_ingot"
+  },
+
+  "result": {
+    "item": "mightymachines:bronze_plate"
+  }
+}
