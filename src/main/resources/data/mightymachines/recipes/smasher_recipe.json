@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " # ",
+        "m m",
+        "m#m"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:iron_block"
+        },
+        "m": {
+            "item": "mightymachines:thallium_ingot"
+        }
+    },
+    "result": {
+        "item": "mightymachines:smasher",
+        "count": 1
+    }
+}
