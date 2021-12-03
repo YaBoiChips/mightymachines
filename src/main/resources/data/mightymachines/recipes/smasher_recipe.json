@@ -3,18 +3,18 @@
     "pattern": [
         " # ",
         "m m",
-        "m#m"
+        "mIm"
     ],
     "key": {
         "#": {
-            "item": "minecraft:iron_block"
+            "item": "minecraft:piston"
         },
         "m": {
             "item": "mightymachines:thallium_ingot"
+        },
+        "I": {
+            "item": "minecraft:iron_block"
         }
     },
-    "result": {
-        "item": "mightymachines:smasher",
-        "count": 1
-    }
+    "result": {}
 }
