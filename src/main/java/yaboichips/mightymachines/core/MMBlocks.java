@@ -28,7 +28,7 @@ public class MMBlocks {
     public static final Block TIN_ORE = createOreBlock("tin_ore");
 
     public static final Block GENERATOR = registerBlock("generator", new GeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
-    public static final Block MANUEL_SMASHER = registerBlock("manuel_smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final Block MANUAL_SMASHER = registerBlock("manual_smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block CUTTER = registerBlock("cutter", new CutterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
 

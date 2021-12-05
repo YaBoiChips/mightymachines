@@ -66,7 +66,7 @@ public class MMItems {
     public static final Item JETPACK = createItem(new Jetpack(ArmorMaterials.IRON, EquipmentSlot.CHEST, new Item.Properties().tab(TAB)), "jetpack");
 
     public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
-    public static final Item SMASHER = createBlockItem(MMBlocks.MANUEL_SMASHER, new Item.Properties().tab(TAB));
+    public static final Item MANUAL_SMASHER = createBlockItem(MMBlocks.MANUAL_SMASHER, new Item.Properties().tab(TAB));
     public static final Item CUTTER = createBlockItem(MMBlocks.CUTTER, new Item.Properties().tab(TAB));
 
 

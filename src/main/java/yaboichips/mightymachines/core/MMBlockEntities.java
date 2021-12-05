@@ -26,7 +26,7 @@ public class MMBlockEntities {
     }    public static final BlockEntityType<GeneratorTE> GENERATOR = register("generator", BlockEntityType.Builder.of(GeneratorTE::new, MMBlocks.GENERATOR));
 
     public static void init() {
-    }    public static final BlockEntityType<SmasherTE> SMASHER = register("smasher", BlockEntityType.Builder.of(SmasherTE::new, MMBlocks.MANUEL_SMASHER));
+    }    public static final BlockEntityType<SmasherTE> SMASHER = register("smasher", BlockEntityType.Builder.of(SmasherTE::new, MMBlocks.MANUAL_SMASHER));
     public static final BlockEntityType<CutterTE> CUTTER = register("cutter", BlockEntityType.Builder.of(CutterTE::new, MMBlocks.CUTTER));
 
 
