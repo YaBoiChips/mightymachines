@@ -1,7 +1,7 @@
 {
   "type": "mightymachines:smashing",
   "base": {
-    "item": "minecraft:thallium_ingot"
+    "item": "mightymachines:thallium_ingot"
   },
 
   "result": {

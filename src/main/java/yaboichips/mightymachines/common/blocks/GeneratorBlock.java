@@ -37,7 +37,6 @@ public class GeneratorBlock extends BaseEntityBlock {
     }
 
 
-
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {

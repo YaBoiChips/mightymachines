@@ -16,6 +16,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
     public GeneratorMenu(int windowId, Inventory playerInv) {
         this(windowId, playerInv, new SimpleContainer(1));
     }
+
     public GeneratorMenu(int windowId, Inventory playerInv, Container inventory) {
         super(MMContainers.GENERATOR, windowId);
         checkContainerSize(inventory, 1);
@@ -39,6 +40,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 142));
         }
     }
+
     @Override
     public boolean stillValid(Player player) {
         return this.inventory.stillValid(player);

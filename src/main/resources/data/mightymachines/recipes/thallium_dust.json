@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:smashing",
+  "base": {
+    "item": "mightymachines:thallium_ore"
+  },
+
+  "result": {
+    "item": "mightymachines:thallium_dust"
+  }
+}

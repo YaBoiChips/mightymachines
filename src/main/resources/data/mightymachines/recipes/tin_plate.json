@@ -1,7 +1,7 @@
 {
   "type": "mightymachines:smashing",
   "base": {
-    "item": "minecraft:tin_ingot"
+    "item": "mightymachines:tin_ingot"
   },
 
   "result": {

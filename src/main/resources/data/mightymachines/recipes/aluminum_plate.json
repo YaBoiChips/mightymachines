@@ -1,7 +1,7 @@
 {
   "type": "mightymachines:smashing",
   "base": {
-    "item": "minecraft:aluminum_ingot"
+    "item": "mightymachines:aluminum_ingot"
   },
 
   "result": {

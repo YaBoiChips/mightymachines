@@ -12,17 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MMItems {
-    public static List<Item> items = new ArrayList<>();
-
     public static final CreativeModeTab TAB = new CreativeModeTab(MightyMachines.MOD_ID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Items.IRON_INGOT);
         }
     };
-
+    public static List<Item> items = new ArrayList<>();
     public static final Item RUBY_ORE = createBlockItem(MMBlocks.RUBY_ORE, new Item.Properties().tab(TAB));
-    public static final Item AMETHYST_ORE = createBlockItem(MMBlocks.AMETHYST_ORE, new Item.Properties().tab(TAB));
     public static final Item SAPPHIRE_ORE = createBlockItem(MMBlocks.SAPPHIRE_ORE, new Item.Properties().tab(TAB));
     public static final Item TOPAZ_ORE = createBlockItem(MMBlocks.TOPAZ_ORE, new Item.Properties().tab(TAB));
     public static final Item OPAL_ORE = createBlockItem(MMBlocks.OPAL_ORE, new Item.Properties().tab(TAB));
@@ -42,14 +39,14 @@ public class MMItems {
     public static final Item ONYX = createItem(new Item(new Item.Properties().tab(TAB)), "onyx");
     public static final Item PYRITE = createItem(new Item(new Item.Properties().tab(TAB)), "pyrite");
     public static final Item THALLIUM_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_ingot");
-    public static final Item BAUXITE_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "bauxite_ingot");
+    public static final Item ALUMINIUM_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "aluminium_ingot");
     public static final Item TIN_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "tin_ingot");
     public static final Item BRONZE_INGOT = createItem(new Item(new Item.Properties().tab(TAB)), "bronze_ingot");
     public static final Item THALLIUM_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_dust");
     public static final Item ENERGETIC_DUST = createItem(new Item(new Item.Properties().tab(TAB)), "energetic_dust");
 
     public static final Item THALLIUM_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_plate");
-    public static final Item BAUXITE_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "bauxite_plate");
+    public static final Item ALUMINIUM_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "aluminium_plate");
     public static final Item TIN_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "tin_plate");
     public static final Item BRONZE_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "bronze_plate");
     public static final Item IRON_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "iron_plate");
@@ -57,7 +54,7 @@ public class MMItems {
     public static final Item COPPER_PLATE = createItem(new Item(new Item.Properties().tab(TAB)), "copper_plate");
 
     public static final Item THALLIUM_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "thallium_gear");
-    public static final Item BAUXITE_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "bauxite_gear");
+    public static final Item ALUMINIUM_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "aluminium_gear");
     public static final Item TIN_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "tin_gear");
     public static final Item BRONZE_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "bronze_gear");
     public static final Item IRON_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "iron_gear");
@@ -69,7 +66,8 @@ public class MMItems {
     public static final Item JETPACK = createItem(new Jetpack(ArmorMaterials.IRON, EquipmentSlot.CHEST, new Item.Properties().tab(TAB)), "jetpack");
 
     public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
-    public static final Item SMASHER = createBlockItem(MMBlocks.SMASHER, new Item.Properties().tab(TAB));
+    public static final Item SMASHER = createBlockItem(MMBlocks.MANUEL_SMASHER, new Item.Properties().tab(TAB));
+    public static final Item CUTTER = createBlockItem(MMBlocks.CUTTER, new Item.Properties().tab(TAB));
 
 
     public static Item createItem(Item item, String id) {

@@ -13,13 +13,13 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import yaboichips.mightymachines.core.MMRecipeSerializers;
 import yaboichips.mightymachines.core.MMRecipes;
 
-public class SmashingRecipe implements Recipe<Container> {
+public class CuttingRecipe implements Recipe<Container> {
 
     private final Ingredient base;
     private final ItemStack result;
     private final ResourceLocation recipeId;
 
-    public SmashingRecipe(ResourceLocation recipeId, Ingredient base, ItemStack result) {
+    public CuttingRecipe(ResourceLocation recipeId, Ingredient base, ItemStack result) {
         this.recipeId = recipeId;
         this.base = base;
         this.result = result;
@@ -57,32 +57,32 @@ public class SmashingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return MMRecipeSerializers.SMASHING;
+        return MMRecipeSerializers.CUTTING;
     }
 
     @Override
     public RecipeType<?> getType() {
-        return MMRecipes.SMASHING;
+        return MMRecipes.CUTTING;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SmashingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CuttingRecipe> {
 
         @Override
-        public SmashingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public CuttingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "base"));
             ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            return new SmashingRecipe(recipeId, ingredient, itemstack);
+            return new CuttingRecipe(recipeId, ingredient, itemstack);
         }
 
         @Override
-        public SmashingRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buffer) {
+        public CuttingRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             ItemStack itemstack = buffer.readItem();
-            return new SmashingRecipe(resourceLocation, ingredient, itemstack);
+            return new CuttingRecipe(resourceLocation, ingredient, itemstack);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, SmashingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, CuttingRecipe recipe) {
             recipe.base.toNetwork(buffer);
             buffer.writeItem(recipe.result);
         }

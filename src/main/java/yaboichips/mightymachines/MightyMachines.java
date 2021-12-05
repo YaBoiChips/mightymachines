@@ -18,12 +18,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import yaboichips.mightymachines.common.tile.screens.CutterScreen;
 import yaboichips.mightymachines.common.tile.screens.GeneratorScreen;
 import yaboichips.mightymachines.common.tile.screens.SmasherScreen;
+import yaboichips.mightymachines.common.world.OreGenerator;
 import yaboichips.mightymachines.core.*;
 
 import javax.annotation.Nonnull;
@@ -33,8 +35,8 @@ import java.util.stream.Collectors;
 @Mod("mightymachines")
 public class MightyMachines {
 
-    private static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "mightymachines";
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public MightyMachines() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -43,18 +45,24 @@ public class MightyMachines {
         bus.addListener(this::processIMC);
         bus.addListener(this::doClientStuff);
 
-
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public static @Nonnull
+    ResourceLocation createResource(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         MenuScreens.register(MMContainers.GENERATOR, GeneratorScreen::new);
         MenuScreens.register(MMContainers.SMASHER, SmasherScreen::new);
+        MenuScreens.register(MMContainers.CUTTER, CutterScreen::new);
         MMKeybinds.register();
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("HELLO FROM PREINIT");
+        OreGenerator.registerOre();
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
 
@@ -71,16 +79,10 @@ public class MightyMachines {
                 collect(Collectors.toList()));
     }
 
-    public static @Nonnull
-    ResourceLocation createResource(String path) {
-        return new ResourceLocation(MOD_ID, path);
-    }
-
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         LOGGER.info("HELLO from server starting");
     }
-
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -94,6 +96,7 @@ public class MightyMachines {
             MMBlocks.blocks = null;
             LOGGER.info("MM: Blocks egistered");
         }
+
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
             LOGGER.info("MM: HELLO from Register Items");
@@ -103,6 +106,7 @@ public class MightyMachines {
             MMItems.items = null;
             LOGGER.info("MM: Items registered");
         }
+
         @SubscribeEvent
         public static void onTileRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {
             LOGGER.info("MM: HELLO from Register Block Entities");
@@ -112,6 +116,7 @@ public class MightyMachines {
             MMBlockEntities.blockentity = null;
             LOGGER.info("MM: Block Entities registered");
         }
+
         @SubscribeEvent
         public static void onMenuRegistry(final RegistryEvent.Register<MenuType<?>> event) {
             LOGGER.info("MM: HELLO from Register Menus");
@@ -121,6 +126,7 @@ public class MightyMachines {
             MMContainers.containers = null;
             LOGGER.info("MM: Menus Registered");
         }
+
         @SubscribeEvent
         public static void onRecipeRegistry(final RegistryEvent.Register<RecipeSerializer<?>> event) {
             LOGGER.info("MM: HELLO from Register Recipes");

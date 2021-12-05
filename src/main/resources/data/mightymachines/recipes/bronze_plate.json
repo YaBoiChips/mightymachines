@@ -1,7 +1,7 @@
 {
   "type": "mightymachines:smashing",
   "base": {
-    "item": "minecraft:bronze_ingot"
+    "item": "mightymachines:bronze_ingot"
   },
 
   "result": {
