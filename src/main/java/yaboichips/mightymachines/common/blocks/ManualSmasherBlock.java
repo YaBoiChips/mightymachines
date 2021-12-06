@@ -13,31 +13,38 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import yaboichips.mightymachines.common.tile.SmasherTE;
+import yaboichips.mightymachines.common.tile.ManualSmasherTE;
 import yaboichips.mightymachines.core.MMBlockEntities;
+import yaboichips.mightymachines.core.MMItems;
 
 import javax.annotation.Nullable;
 
-public class SmasherBlock extends BaseEntityBlock {
-    public SmasherBlock(Properties properties) {
+public class ManualSmasherBlock extends BaseEntityBlock {
+    public ManualSmasherBlock(Properties properties) {
         super(properties);
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MMBlockEntities.SMASHER.create(pos, state);
+        return MMBlockEntities.MANUAL_SMASHER.create(pos, state);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+        if (player.getItemInHand(hand).getItem() == MMItems.CRANK) {
+            ManualSmasherTE tile = (ManualSmasherTE) world.getBlockEntity(pos);
+            tile.setWork(tile.getWork() + 1);
+            return InteractionResult.SUCCESS;
+        } else {
             if (!world.isClientSide) {
                 BlockEntity tile = world.getBlockEntity(pos);
-                if (tile instanceof SmasherTE) {
-                    player.openMenu((SmasherTE) tile);
+                if (tile instanceof ManualSmasherTE) {
+                    player.openMenu((ManualSmasherTE) tile);
                     return InteractionResult.SUCCESS;
                 }
             }
+        }
         return InteractionResult.FAIL;
     }
 
@@ -45,8 +52,8 @@ public class SmasherBlock extends BaseEntityBlock {
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity te = worldIn.getBlockEntity(pos);
-            if (te instanceof SmasherTE) {
-                Containers.dropContents(worldIn, pos, ((SmasherTE) te).getItems());
+            if (te instanceof ManualSmasherTE) {
+                Containers.dropContents(worldIn, pos, ((ManualSmasherTE) te).getItems());
             }
             super.onRemove(state, worldIn, pos, newState, isMoving);
         }
@@ -61,6 +68,6 @@ public class SmasherBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
-        return createTickerHelper(type, MMBlockEntities.SMASHER, SmasherTE::tick);
+        return createTickerHelper(type, MMBlockEntities.MANUAL_SMASHER, ManualSmasherTE::tick);
     }
 }

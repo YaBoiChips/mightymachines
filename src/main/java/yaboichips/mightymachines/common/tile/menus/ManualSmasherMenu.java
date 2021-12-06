@@ -14,18 +14,18 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import yaboichips.mightymachines.core.MMContainers;
 
-public class SmasherMenu extends RecipeBookMenu {
+public class ManualSmasherMenu extends RecipeBookMenu {
 
     public final Container container;
     protected final Level level;
 
 
-    public SmasherMenu(int windowId, Inventory playerInv) {
+    public ManualSmasherMenu(int windowId, Inventory playerInv) {
         this(windowId, playerInv, new SimpleContainer(2));
     }
 
-    public SmasherMenu(int windowId, Inventory playerInv, Container inventory) {
-        super(MMContainers.SMASHER, windowId);
+    public ManualSmasherMenu(int windowId, Inventory playerInv, Container inventory) {
+        super(MMContainers.MANUAL_SMASHER, windowId);
         checkContainerSize(inventory, 2);
         this.container = inventory;
         inventory.startOpen(playerInv.player);

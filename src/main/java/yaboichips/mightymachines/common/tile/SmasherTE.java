@@ -24,12 +24,15 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import yaboichips.mightymachines.common.blocks.SmasherBlock;
 import yaboichips.mightymachines.common.recipes.SmashingRecipe;
-import yaboichips.mightymachines.common.tile.menus.SmasherMenu;
+import yaboichips.mightymachines.common.tile.menus.ManualSmasherMenu;
 import yaboichips.mightymachines.core.MMBlockEntities;
 import yaboichips.mightymachines.core.MMRecipes;
 import yaboichips.mightymachines.util.BlockEntityPacketHandler;
@@ -37,14 +40,18 @@ import yaboichips.mightymachines.util.BlockEntityPacketHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SmasherTE extends RandomizableContainerBlockEntity implements BlockEntityPacketHandler, WorldlyContainer {
+public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketHandler, WorldlyContainer {
     private static final int[] SLOTS_FOR_UP = new int[]{0};
     private static final int[] SLOTS_FOR_DOWN = new int[]{1};
     private static final int[] SLOTS_FOR_SIDES = new int[]{0};
     private final RecipeType<? extends SmashingRecipe> recipeType;
     private final Object2IntOpenHashMap<ResourceLocation> recipesUsed = new Object2IntOpenHashMap<>();
     private final IItemHandlerModifiable items = createHandler();
+    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
+    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
     public int work;
+    private int energy;
+
     protected int numPlayersUsing;
     private NonNullList<ItemStack> contents = NonNullList.withSize(2, ItemStack.EMPTY);
     private final LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
@@ -58,6 +65,8 @@ public class SmasherTE extends RandomizableContainerBlockEntity implements Block
     //Controllers
     public static void tick(Level world, BlockPos pos, BlockState state, SmasherTE tile) {
         makePlates(tile, world);
+        working(tile);
+        System.out.println(tile.energy);
     }
 
     public static void makePlates(SmasherTE tile, Level world) {
@@ -65,15 +74,22 @@ public class SmasherTE extends RandomizableContainerBlockEntity implements Block
         if (!base.isEmpty()) {
             Recipe<?> recipe = world.getRecipeManager().getRecipeFor((RecipeType<SmashingRecipe>) tile.recipeType, tile, world).orElse(null);
             int i = tile.getMaxStackSize();
-            if (tile.getWork() == 4) {
-                world.playSound(null, tile.getBlockPos(), SoundEvents.NETHER_BRICKS_PLACE, SoundSource.BLOCKS, 1, 1);
+            if (tile.getWork() >= 120) {
                 tile.smash(recipe, tile.contents, i);
                 tile.setRecipeUsed(recipe);
-                tile.setWork(5);
+                world.playSound(null, tile.getBlockPos(), SoundEvents.UI_STONECUTTER_TAKE_RESULT, SoundSource.AMBIENT, 1, 1);
+                tile.setWork(0);
             }
         }
-        if (tile.getWork() == 5) {
-            tile.setWork(0);
+    }
+
+    public static void working(SmasherTE tile){
+        if (tile.getEnergy() > 0) {
+            ItemStack base = tile.contents.get(0);
+            if (!base.isEmpty()) {
+                tile.setWork(tile.getWork() + 1);
+                tile.setEnergy(tile.getEnergy() - 10);
+            }
         }
     }
 
@@ -95,7 +111,7 @@ public class SmasherTE extends RandomizableContainerBlockEntity implements Block
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
-        return new SmasherMenu(id, player, this);
+        return new ManualSmasherMenu(id, player, this);
     }
 
     @Override
@@ -141,11 +157,20 @@ public class SmasherTE extends RandomizableContainerBlockEntity implements Block
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nonnull Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public void addEnergy(int energy) {
+        this.energy += energy;
+    }
+
+
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nonnull Direction side) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return itemHandler.cast();
         }
-        return super.getCapability(cap, side);
+        if (capability == CapabilityEnergy.ENERGY){
+            return energyHandler.cast();
+        }
+        return super.getCapability(capability, side);
     }
 
     @Nonnull
@@ -187,6 +212,7 @@ public class SmasherTE extends RandomizableContainerBlockEntity implements Block
     public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("Work", this.getWork());
+        compound.putInt("Energy", this.getEnergy());
         CompoundTag compoundtag = new CompoundTag();
         this.recipesUsed.forEach((nbt, string) -> {
             compoundtag.putInt(nbt.toString(), string);
@@ -198,6 +224,7 @@ public class SmasherTE extends RandomizableContainerBlockEntity implements Block
     @Override
     public void load(CompoundTag compound) {
         this.setWork(compound.getInt("Work"));
+        this.setEnergy(compound.getInt("Energy"));
         super.load(compound);
         CompoundTag compoundtag = compound.getCompound("RecipesUsed");
         for (String s : compoundtag.getAllKeys()) {
@@ -256,5 +283,48 @@ public class SmasherTE extends RandomizableContainerBlockEntity implements Block
     @Override
     public boolean canTakeItemThroughFace(int p_19239_, ItemStack p_19240_, Direction p_19241_) {
         return true;
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        return 10;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored() {
+        return getEnergy();
+    }
+
+    @Override
+    public void setEnergyStored(int energy) {
+        this.energy = energy;
+    }
+
+    @Override
+    public int getMaxEnergyStored() {
+        return 10000;
+    }
+
+    @Override
+    public boolean canExtract() {
+        return false;
+    }
+
+    @Override
+    public boolean canReceive() {
+        return true;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 }

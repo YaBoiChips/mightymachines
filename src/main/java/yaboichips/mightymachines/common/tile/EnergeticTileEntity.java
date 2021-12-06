@@ -1,6 +1,7 @@
 package yaboichips.mightymachines.common.tile;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -9,11 +10,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import javax.annotation.Nullable;
 
 public class EnergeticTileEntity extends RandomizableContainerBlockEntity implements IEnergyStorage {
 
     private int energy;
+    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
+    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     protected EnergeticTileEntity(BlockEntityType<?> p_155629_, BlockPos p_155630_, BlockState p_155631_) {
         super(p_155629_, p_155630_, p_155631_);
@@ -26,6 +35,10 @@ public class EnergeticTileEntity extends RandomizableContainerBlockEntity implem
 
     @Override
     protected void setItems(NonNullList<ItemStack> p_59625_) {
+    }
+
+    public int getMaxTransfer(){
+        return 10;
     }
 
     @Override
@@ -79,5 +92,13 @@ public class EnergeticTileEntity extends RandomizableContainerBlockEntity implem
     @Override
     public boolean canReceive() {
         return false;
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityEnergy.ENERGY){
+            return energyHandler.cast();
+        }
+        return super.getCapability(cap, side);
     }
 }

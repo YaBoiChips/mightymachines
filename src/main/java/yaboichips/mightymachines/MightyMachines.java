@@ -24,7 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import yaboichips.mightymachines.common.tile.screens.CutterScreen;
 import yaboichips.mightymachines.common.tile.screens.GeneratorScreen;
-import yaboichips.mightymachines.common.tile.screens.SmasherScreen;
+import yaboichips.mightymachines.common.tile.screens.ManualSmasherScreen;
 import yaboichips.mightymachines.common.world.OreGenerator;
 import yaboichips.mightymachines.core.*;
 
@@ -55,7 +55,7 @@ public class MightyMachines {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         MenuScreens.register(MMContainers.GENERATOR, GeneratorScreen::new);
-        MenuScreens.register(MMContainers.SMASHER, SmasherScreen::new);
+        MenuScreens.register(MMContainers.MANUAL_SMASHER, ManualSmasherScreen::new);
         MenuScreens.register(MMContainers.CUTTER, CutterScreen::new);
         MMKeybinds.register();
     }

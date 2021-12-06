@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import yaboichips.mightymachines.MightyMachines;
 import yaboichips.mightymachines.common.tile.CutterTE;
 import yaboichips.mightymachines.common.tile.GeneratorTE;
+import yaboichips.mightymachines.common.tile.ManualSmasherTE;
 import yaboichips.mightymachines.common.tile.SmasherTE;
 
 import java.util.ArrayList;
@@ -17,21 +18,19 @@ import java.util.List;
 public class MMBlockEntities {
     public static List<BlockEntityType<?>> blockentity = new ArrayList<>();
 
+    public static final BlockEntityType<GeneratorTE> GENERATOR = register("generator", BlockEntityType.Builder.of(GeneratorTE::new, MMBlocks.GENERATOR));
+    public static final BlockEntityType<ManualSmasherTE> MANUAL_SMASHER = register("manual_smasher", BlockEntityType.Builder.of(ManualSmasherTE::new, MMBlocks.MANUAL_SMASHER));
+    public static final BlockEntityType<SmasherTE> SMASHER = register("smasher", BlockEntityType.Builder.of(SmasherTE::new, MMBlocks.SMASHER));
+    public static final BlockEntityType<CutterTE> CUTTER = register("cutter", BlockEntityType.Builder.of(CutterTE::new, MMBlocks.CUTTER));
+
     private static <T extends BlockEntity> BlockEntityType<T> register(String key, BlockEntityType.Builder<T> builder) {
         Type<?> type = Util.fetchChoiceType(References.BLOCK_ENTITY, key);
         BlockEntityType<T> blockEntityType = builder.build(type);
         blockEntityType.setRegistryName(new ResourceLocation(MightyMachines.MOD_ID, key));
         blockentity.add(blockEntityType);
         return blockEntityType;
-    }    public static final BlockEntityType<GeneratorTE> GENERATOR = register("generator", BlockEntityType.Builder.of(GeneratorTE::new, MMBlocks.GENERATOR));
+    }
 
     public static void init() {
-    }    public static final BlockEntityType<SmasherTE> SMASHER = register("smasher", BlockEntityType.Builder.of(SmasherTE::new, MMBlocks.MANUAL_SMASHER));
-    public static final BlockEntityType<CutterTE> CUTTER = register("cutter", BlockEntityType.Builder.of(CutterTE::new, MMBlocks.CUTTER));
-
-
-
-
-
-
+    }
 }

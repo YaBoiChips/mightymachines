@@ -7,14 +7,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import yaboichips.mightymachines.MightyMachines;
-import yaboichips.mightymachines.common.tile.menus.SmasherMenu;
+import yaboichips.mightymachines.common.tile.menus.ManualSmasherMenu;
 
-public class SmasherScreen extends AbstractContainerScreen<SmasherMenu> {
+public class ManualSmasherScreen extends AbstractContainerScreen<ManualSmasherMenu> {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(MightyMachines.MOD_ID, "textures/gui/smasher.png");
 
 
-    public SmasherScreen(SmasherMenu screenContainer, Inventory inv, Component titleIn) {
+    public ManualSmasherScreen(ManualSmasherMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.leftPos = 0;
         this.topPos = 0;

@@ -20,18 +20,16 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import yaboichips.mightymachines.common.blocks.CutterBlock;
-import yaboichips.mightymachines.common.recipes.CuttingRecipe;
-import yaboichips.mightymachines.common.tile.menus.CutterMenu;
+import yaboichips.mightymachines.common.blocks.ManualSmasherBlock;
+import yaboichips.mightymachines.common.recipes.SmashingRecipe;
+import yaboichips.mightymachines.common.tile.menus.ManualSmasherMenu;
 import yaboichips.mightymachines.core.MMBlockEntities;
 import yaboichips.mightymachines.core.MMRecipes;
 import yaboichips.mightymachines.util.BlockEntityPacketHandler;
@@ -39,57 +37,43 @@ import yaboichips.mightymachines.util.BlockEntityPacketHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHandler, WorldlyContainer {
+public class ManualSmasherTE extends RandomizableContainerBlockEntity implements BlockEntityPacketHandler, WorldlyContainer {
     private static final int[] SLOTS_FOR_UP = new int[]{0};
     private static final int[] SLOTS_FOR_DOWN = new int[]{1};
     private static final int[] SLOTS_FOR_SIDES = new int[]{0};
-    private final RecipeType<? extends CuttingRecipe> recipeType;
+    private final RecipeType<? extends SmashingRecipe> recipeType;
     private final Object2IntOpenHashMap<ResourceLocation> recipesUsed = new Object2IntOpenHashMap<>();
     private final IItemHandlerModifiable items = createHandler();
-    public boolean working;
+    public int work;
     protected int numPlayersUsing;
-    private int energy;
-    private int work;
     private NonNullList<ItemStack> contents = NonNullList.withSize(2, ItemStack.EMPTY);
     private final LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
-    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
-    public CutterTE(BlockPos pos, BlockState state) {
-        super(MMBlockEntities.CUTTER, pos, state);
-        recipeType = MMRecipes.CUTTING;
+
+    public ManualSmasherTE(BlockPos pos, BlockState state) {
+        super(MMBlockEntities.MANUAL_SMASHER, pos, state);
+        recipeType = MMRecipes.SMASHING;
     }
 
     //Controllers
-    public static void tick(Level world, BlockPos pos, BlockState state, CutterTE tile) {
+    public static void tick(Level world, BlockPos pos, BlockState state, ManualSmasherTE tile) {
         makePlates(tile, world);
-        working(tile);
     }
 
-    public static void makePlates(CutterTE tile, Level world) {
+    public static void makePlates(ManualSmasherTE tile, Level world) {
         ItemStack base = tile.contents.get(0);
         if (!base.isEmpty()) {
-            Recipe<?> recipe = world.getRecipeManager().getRecipeFor((RecipeType<CuttingRecipe>) tile.recipeType, tile, world).orElse(null);
+            Recipe<?> recipe = world.getRecipeManager().getRecipeFor((RecipeType<SmashingRecipe>) tile.recipeType, tile, world).orElse(null);
             int i = tile.getMaxStackSize();
-            if (tile.getWork() >= 120) {
-                tile.cut(recipe, tile.contents, i);
+            if (tile.getWork() == 4) {
+                world.playSound(null, tile.getBlockPos(), SoundEvents.NETHER_BRICKS_PLACE, SoundSource.BLOCKS, 1, 1);
+                tile.smash(recipe, tile.contents, i);
                 tile.setRecipeUsed(recipe);
-                world.playSound(null, tile.getBlockPos(), SoundEvents.UI_STONECUTTER_TAKE_RESULT, SoundSource.AMBIENT, 1, 1);
-                tile.setWork(0);
+                tile.setWork(5);
             }
         }
-    }
-
-    public static void working(CutterTE tile) {
-        if (tile.getEnergy() > 1) {
-            ItemStack base = tile.contents.get(0);
-            if (!base.isEmpty()) {
-                tile.setWork(tile.getWork() + 1);
-                tile.setEnergy(tile.getEnergy() - 10);
-                tile.setWorking(true);
-            } else {
-                tile.setWorking(false);
-            }
+        if (tile.getWork() == 5) {
+            tile.setWork(0);
         }
     }
 
@@ -106,22 +90,12 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("container.cutter_container");
+        return new TranslatableComponent("container.smasher_container");
     }
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
-        return new CutterMenu(id, player, this);
-    }
-
-    @Override
-    public void addEnergy(int energy) {
-        this.energy += energy;
-    }
-
-    @Override
-    public int getMaxTransfer() {
-        return 10;
+        return new ManualSmasherMenu(id, player, this);
     }
 
     @Override
@@ -160,21 +134,18 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     protected void onOpenOrClose() {
         Block block = this.getBlockState().getBlock();
-        if (block instanceof CutterBlock) {
+        if (block instanceof ManualSmasherBlock) {
             this.level.blockEvent(this.worldPosition, block, 1, this.numPlayersUsing);
             this.level.updateNeighborsAt(this.worldPosition, block);
         }
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nonnull Direction side) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nonnull Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return itemHandler.cast();
         }
-        if (capability == CapabilityEnergy.ENERGY){
-            return energyHandler.cast();
-        }
-        return super.getCapability(capability, side);
+        return super.getCapability(cap, side);
     }
 
     @Nonnull
@@ -215,8 +186,6 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
     @Override
     public CompoundTag save(CompoundTag compound) {
         super.save(compound);
-        compound.putBoolean("Working", this.isWorking());
-        compound.putInt("Energy", this.getEnergy());
         compound.putInt("Work", this.getWork());
         CompoundTag compoundtag = new CompoundTag();
         this.recipesUsed.forEach((nbt, string) -> {
@@ -228,17 +197,16 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     @Override
     public void load(CompoundTag compound) {
-        this.setWorking(compound.getBoolean("Working"));
-        this.setEnergy(compound.getInt("Energy"));
         this.setWork(compound.getInt("Work"));
         super.load(compound);
         CompoundTag compoundtag = compound.getCompound("RecipesUsed");
         for (String s : compoundtag.getAllKeys()) {
             this.recipesUsed.put(new ResourceLocation(s), compoundtag.getInt(s));
         }
+
     }
 
-    private boolean cut(@Nullable Recipe<?> recipe, NonNullList<ItemStack> stack, int i) {
+    private boolean smash(@Nullable Recipe<?> recipe, NonNullList<ItemStack> stack, int i) {
         if (recipe != null) {
             ItemStack itemstack = stack.get(0);
             ItemStack itemstack1 = ((Recipe<WorldlyContainer>) recipe).assemble(this);
@@ -263,14 +231,6 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
     }
 
     //Getters/Setters
-    public boolean isWorking() {
-        return working;
-    }
-
-    public void setWorking(boolean working) {
-        this.working = working;
-    }
-
     public int getWork() {
         return work;
     }
@@ -296,49 +256,5 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
     @Override
     public boolean canTakeItemThroughFace(int p_19239_, ItemStack p_19240_, Direction p_19241_) {
         return true;
-    }
-
-
-    @Override
-    public int receiveEnergy(int maxReceive, boolean simulate) {
-        return 10;
-    }
-
-    @Override
-    public int extractEnergy(int maxExtract, boolean simulate) {
-        return 0;
-    }
-
-    @Override
-    public int getEnergyStored() {
-        return getEnergy();
-    }
-
-    @Override
-    public void setEnergyStored(int energy) {
-        this.energy = energy;
-    }
-
-    @Override
-    public int getMaxEnergyStored() {
-        return 10000;
-    }
-
-    @Override
-    public boolean canExtract() {
-        return false;
-    }
-
-    @Override
-    public boolean canReceive() {
-        return true;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
     }
 }

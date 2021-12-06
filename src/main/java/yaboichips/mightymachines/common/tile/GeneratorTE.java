@@ -43,7 +43,7 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
     protected int numPlayersUsing;
     private NonNullList<ItemStack> contents = NonNullList.withSize(1, ItemStack.EMPTY);
     private final LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
-    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), 10);
+    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
 
@@ -84,6 +84,11 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
     }
 
     //Energy
+
+
+    @Override
+    public int getMaxTransfer() {return 10;}
+
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         return 0;
@@ -127,7 +132,6 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
                 BlockEntity tileEntity = level.getBlockEntity(getBlockPos().relative(facing));
                 if (tileEntity != null) {
                     if (tileEntity.getCapability(CapabilityEnergy.ENERGY).isPresent()) {
-                        System.out.println("working");
                         int sent = 10;
                         ((EnergeticTileEntity) tileEntity).addEnergy(sent);
                         this.consumePower(sent);

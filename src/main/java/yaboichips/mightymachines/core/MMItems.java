@@ -15,7 +15,7 @@ public class MMItems {
     public static final CreativeModeTab TAB = new CreativeModeTab(MightyMachines.MOD_ID) {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(Items.IRON_INGOT);
+            return new ItemStack(MMItems.THALLIUM_DUST);
         }
     };
     public static List<Item> items = new ArrayList<>();
@@ -67,6 +67,7 @@ public class MMItems {
 
     public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
     public static final Item MANUAL_SMASHER = createBlockItem(MMBlocks.MANUAL_SMASHER, new Item.Properties().tab(TAB));
+    public static final Item SMASHER = createBlockItem(MMBlocks.SMASHER, new Item.Properties().tab(TAB));
     public static final Item CUTTER = createBlockItem(MMBlocks.CUTTER, new Item.Properties().tab(TAB));
 
 

@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import yaboichips.mightymachines.MightyMachines;
 import yaboichips.mightymachines.common.blocks.CutterBlock;
 import yaboichips.mightymachines.common.blocks.GeneratorBlock;
+import yaboichips.mightymachines.common.blocks.ManualSmasherBlock;
 import yaboichips.mightymachines.common.blocks.SmasherBlock;
 
 import javax.annotation.Nonnull;
@@ -18,17 +19,18 @@ public class MMBlocks {
     //ores
     public static final Block RUBY_ORE = createOreBlock("ruby_ore"); //auto smelt
     public static final Block SAPPHIRE_ORE = createOreBlock("sapphire_ore"); //looting
-    public static final Block TOPAZ_ORE = createOreBlock("topaz_ore"); //
-    public static final Block OPAL_ORE = createOreBlock("opal_ore"); //
+    public static final Block TOPAZ_ORE = createOreBlock("topaz_ore"); //explosion :)
+    public static final Block OPAL_ORE = createOreBlock("opal_ore"); //find an ore in stone
     public static final Block AMBER_ORE = createOreBlock("amber_ore"); //silk touch
-    public static final Block ONYX_ORE = createOreBlock("onyx_ore"); //
+    public static final Block ONYX_ORE = createOreBlock("onyx_ore"); //feeds you
     public static final Block PYRITE_ORE = createOreBlock("pyrite_ore"); // 3x3
     public static final Block THALLIUM_ORE = createOreBlock("thallium_ore");
     public static final Block BAUXITE_ORE = createOreBlock("bauxite_ore");
     public static final Block TIN_ORE = createOreBlock("tin_ore");
 
     public static final Block GENERATOR = registerBlock("generator", new GeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
-    public static final Block MANUAL_SMASHER = registerBlock("manual_smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final Block MANUAL_SMASHER = registerBlock("manual_smasher", new ManualSmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final Block SMASHER = registerBlock("smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block CUTTER = registerBlock("cutter", new CutterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
 
