@@ -202,10 +202,6 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
         return nbtTag;
     }
 
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(getBlockPos(), -1, getUpdateTag());
-    }
 
     @Override
     public void handleClientPacketNoTypeCheck(ClientboundBlockEntityDataPacket packet) {

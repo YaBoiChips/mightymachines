@@ -33,7 +33,6 @@ public class MMBlocks {
     public static final Block SMASHER = registerBlock("smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block CUTTER = registerBlock("cutter", new CutterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
-
     static @Nonnull
     Block createOreBlock(String id) {
         Block stone = new Block(BlockBehaviour.Properties.copy(Blocks.IRON_ORE));
@@ -43,9 +42,7 @@ public class MMBlocks {
     static @Nonnull
     <T extends Block> T registerBlock(String id, @Nonnull T block) {
         block.setRegistryName(MightyMachines.createResource(id));
-
         blocks.add(block);
-
         return block;
     }
 

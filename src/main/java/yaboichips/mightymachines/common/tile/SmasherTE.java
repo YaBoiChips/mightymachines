@@ -20,7 +20,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -196,11 +195,6 @@ public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketH
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTag = super.getUpdateTag();
         return nbtTag;
-    }
-
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(getBlockPos(), -1, getUpdateTag());
     }
 
     @Override

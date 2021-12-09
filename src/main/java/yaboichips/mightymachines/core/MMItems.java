@@ -7,6 +7,10 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import yaboichips.mightymachines.MightyMachines;
 import yaboichips.mightymachines.common.items.Jetpack;
+import yaboichips.mightymachines.common.items.guns.AmberGun;
+import yaboichips.mightymachines.common.items.guns.OpalGun;
+import yaboichips.mightymachines.common.items.guns.PyriteGun;
+import yaboichips.mightymachines.common.items.guns.RubyGun;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +65,13 @@ public class MMItems {
     public static final Item GOLD_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "gold_gear");
     public static final Item COPPER_GEAR = createItem(new Item(new Item.Properties().tab(TAB)), "copper_gear");
 
+    public static final Item RUBY_GUN = createItem(new RubyGun(new Item.Properties().tab(TAB)), "ruby_gun");
+    public static final Item OPAL_GUN = createItem(new OpalGun(new Item.Properties().tab(TAB)), "opal_gun");
+    public static final Item PYRITE_GUN = createItem(new PyriteGun(new Item.Properties().tab(TAB)), "pyrite_gun");
+    public static final Item AMBER_GUN = createItem(new AmberGun(new Item.Properties().tab(TAB)), "amber_gun");
+
+
+
     public static final Item CRANK = createItem(new Item(new Item.Properties().tab(TAB)), "crank");
 
     public static final Item JETPACK = createItem(new Jetpack(ArmorMaterials.IRON, EquipmentSlot.CHEST, new Item.Properties().tab(TAB)), "jetpack");
@@ -69,7 +80,6 @@ public class MMItems {
     public static final Item MANUAL_SMASHER = createBlockItem(MMBlocks.MANUAL_SMASHER, new Item.Properties().tab(TAB));
     public static final Item SMASHER = createBlockItem(MMBlocks.SMASHER, new Item.Properties().tab(TAB));
     public static final Item CUTTER = createBlockItem(MMBlocks.CUTTER, new Item.Properties().tab(TAB));
-
 
     public static Item createItem(Item item, String id) {
         return createItem(item, MightyMachines.createResource(id));
@@ -82,9 +92,7 @@ public class MMItems {
     public static Item createItem(Item item, ResourceLocation id) {
         if (id != null && !id.equals(new ResourceLocation("minecraft:air"))) {
             item.setRegistryName(id);
-
             items.add(item);
-
             return item;
         } else return null;
     }

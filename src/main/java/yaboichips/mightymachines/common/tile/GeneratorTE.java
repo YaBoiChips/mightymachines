@@ -247,10 +247,6 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
         return nbtTag;
     }
 
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(getBlockPos(), -1, getUpdateTag());
-    }
 
     @Override
     public void handleClientPacketNoTypeCheck(ClientboundBlockEntityDataPacket packet) {
