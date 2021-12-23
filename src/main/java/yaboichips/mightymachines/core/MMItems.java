@@ -7,10 +7,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import yaboichips.mightymachines.MightyMachines;
 import yaboichips.mightymachines.common.items.Jetpack;
-import yaboichips.mightymachines.common.items.guns.AmberGun;
-import yaboichips.mightymachines.common.items.guns.OpalGun;
-import yaboichips.mightymachines.common.items.guns.PyriteGun;
-import yaboichips.mightymachines.common.items.guns.RubyGun;
+import yaboichips.mightymachines.common.items.guns.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +30,18 @@ public class MMItems {
     public static final Item THALLIUM_ORE = createBlockItem(MMBlocks.THALLIUM_ORE, new Item.Properties().tab(TAB));
     public static final Item BAUXITE_ORE = createBlockItem(MMBlocks.BAUXITE_ORE, new Item.Properties().tab(TAB));
     public static final Item TIN_ORE = createBlockItem(MMBlocks.TIN_ORE, new Item.Properties().tab(TAB));
+
+    public static final Item DEEPSLATE_RUBY_ORE = createBlockItem(MMBlocks.DEEPSLATE_RUBY_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_SAPPHIRE_ORE = createBlockItem(MMBlocks.DEEPSLATE_SAPPHIRE_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_TOPAZ_ORE = createBlockItem(MMBlocks.DEEPSLATE_TOPAZ_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_OPAL_ORE = createBlockItem(MMBlocks.DEEPSLATE_OPAL_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_AMBER_ORE = createBlockItem(MMBlocks.DEEPSLATE_AMBER_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_ONYX_ORE = createBlockItem(MMBlocks.DEEPSLATE_ONYX_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_PYRITE_ORE = createBlockItem(MMBlocks.DEEPSLATE_PYRITE_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_THALLIUM_ORE = createBlockItem(MMBlocks.DEEPSLATE_THALLIUM_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_BAUXITE_ORE = createBlockItem(MMBlocks.DEEPSLATE_BAUXITE_ORE, new Item.Properties().tab(TAB));
+    public static final Item DEEPSLATE_TIN_ORE = createBlockItem(MMBlocks.DEEPSLATE_TIN_ORE, new Item.Properties().tab(TAB));
+
 
     public static final Item RUBY = createItem(new Item(new Item.Properties().tab(TAB)), "ruby");
     public static final Item AMETHYST = createItem(new Item(new Item.Properties().tab(TAB)), "amethyst");
@@ -69,8 +78,8 @@ public class MMItems {
     public static final Item OPAL_GUN = createItem(new OpalGun(new Item.Properties().tab(TAB)), "opal_gun");
     public static final Item PYRITE_GUN = createItem(new PyriteGun(new Item.Properties().tab(TAB)), "pyrite_gun");
     public static final Item AMBER_GUN = createItem(new AmberGun(new Item.Properties().tab(TAB)), "amber_gun");
-
-
+    public static final Item TOPAZ_GUN = createItem(new TopazGun(new Item.Properties().tab(TAB)), "topaz_gun");
+    public static final Item SAPPHIRE_GUN = createItem(new SapphireGun(new Item.Properties().tab(TAB)), "sapphire_gun");
 
     public static final Item CRANK = createItem(new Item(new Item.Properties().tab(TAB)), "crank");
 

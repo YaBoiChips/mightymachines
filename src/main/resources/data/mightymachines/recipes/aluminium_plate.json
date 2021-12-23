@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:smashing",
+  "base": {
+    "item": "mightymachines:aluminium_ingot"
+  },
+
+  "result": {
+    "item": "mightymachines:aluminium_plate"
+  }
+}

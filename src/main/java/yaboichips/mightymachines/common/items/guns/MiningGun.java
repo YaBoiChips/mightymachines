@@ -14,7 +14,6 @@ public class MiningGun extends Item {
 
     public BlockPos getBlockLookingAt(Player player) {
         HitResult block = player.pick(30.0D, 0.0F, false);
-
         if (block.getType() == HitResult.Type.BLOCK) {
             BlockPos pos = ((BlockHitResult) block).getBlockPos();
             if (player.level.getBlockState(pos) != Blocks.BEDROCK.defaultBlockState()) {
