@@ -9,6 +9,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -259,6 +260,9 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
         compound.putInt("Fuel", this.getFuel());
         compound.putInt("Cooldown", this.getCooldown());
         compound.putInt("Energy", this.getEnergy());
+        if (!this.trySaveLootTable(compound)) {
+            ContainerHelper.saveAllItems(compound, this.contents);
+        }
         return compound;
     }
 
@@ -268,6 +272,9 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
         this.setFuel(compound.getInt("Fuel"));
         this.setCooldown(compound.getInt("Cooldown"));
         this.setEnergy(compound.getInt("Energy"));
+        if (!this.tryLoadLootTable(compound)) {
+            ContainerHelper.loadAllItems(compound, this.contents);
+        }
     }
 
     public void generatePower(int energy) {

@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:cutting",
+  "base": {
+    "item": "mightymachines:aluminium_plate"
+  },
+
+  "result": {
+    "item": "mightymachines:aluminium_gear"
+  }
+}

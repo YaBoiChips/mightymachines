@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:cutting",
+  "base": {
+    "item": "mightymachines:copper_plate"
+  },
+
+  "result": {
+    "item": "mightymachines:copper_gear"
+  }
+}

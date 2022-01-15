@@ -9,18 +9,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -29,21 +29,19 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import yaboichips.mightymachines.common.blocks.SmasherBlock;
-import yaboichips.mightymachines.common.recipes.SmashingRecipe;
-import yaboichips.mightymachines.common.tile.menus.ManualSmasherMenu;
+import yaboichips.mightymachines.common.blocks.QuarryBlock;
+import yaboichips.mightymachines.common.tile.menus.QuarryMenu;
 import yaboichips.mightymachines.core.MMBlockEntities;
-import yaboichips.mightymachines.core.MMRecipes;
 import yaboichips.mightymachines.util.BlockEntityPacketHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class QuarryTE extends EnergeticTileEntity implements BlockEntityPacketHandler, WorldlyContainer {
     private static final int[] SLOTS_FOR_UP = new int[]{0};
     private static final int[] SLOTS_FOR_DOWN = new int[]{1};
     private static final int[] SLOTS_FOR_SIDES = new int[]{0};
-    private final RecipeType<? extends SmashingRecipe> recipeType;
     private final Object2IntOpenHashMap<ResourceLocation> recipesUsed = new Object2IntOpenHashMap<>();
     private final IItemHandlerModifiable items = createHandler();
     private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
@@ -52,19 +50,39 @@ public class QuarryTE extends EnergeticTileEntity implements BlockEntityPacketHa
     private int energy;
 
     protected int numPlayersUsing;
-    private NonNullList<ItemStack> contents = NonNullList.withSize(2, ItemStack.EMPTY);
+    private NonNullList<ItemStack> contents = NonNullList.withSize(54, ItemStack.EMPTY);
     private final LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
 
 
     public QuarryTE(BlockPos pos, BlockState state) {
-        super(MMBlockEntities.SMASHER, pos, state);
-        recipeType = MMRecipes.SMASHING;
+        super(MMBlockEntities.QUARRY, pos, state);
     }
 
     //Controllers
     public static void tick(Level world, BlockPos pos, BlockState state, QuarryTE tile) {
+        mine(world, pos, tile);
     }
 
+    public static void mine(Level world, BlockPos pos, QuarryTE tile) {
+        if (world.isClientSide) return;
+        if (tile.getEnergy() > 0) {
+//            for (BlockPos block : BlockPos.betweenClosed(pos.getX() - 2, pos.getY() - 1, pos.getZ() - 2, pos.getX() + 2, 1, pos.getZ() + 2)) {
+//                if (tile.getWork() <= 0) {
+//                    world.destroyBlock(block, true);
+//                    tile.setWork(120);
+//                }
+//            }
+//            tile.setWork(tile.getWork() - 1);
+            AABB aabb = new AABB(pos).inflate(4);
+            List<ItemEntity> itemEntity = world.getEntitiesOfClass(ItemEntity.class, aabb);
+            NonNullList<ItemStack> contents = tile.contents;
+            for (ItemEntity item : itemEntity) {
+                System.out.println("item");
+                tile.items.setStackInSlot(1, item.getItem());
+                item.remove(Entity.RemovalReason.DISCARDED);
+            }
+        }
+    }
 
     //Container
     @Override
@@ -84,12 +102,12 @@ public class QuarryTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
-        return new ManualSmasherMenu(id, player, this);
+        return new QuarryMenu(id, player, this);
     }
 
     @Override
     public int getContainerSize() {
-        return 2;
+        return 54;
     }
 
     @Override
@@ -123,7 +141,7 @@ public class QuarryTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     protected void onOpenOrClose() {
         Block block = this.getBlockState().getBlock();
-        if (block instanceof SmasherBlock) {
+        if (block instanceof QuarryBlock) {
             this.level.blockEvent(this.worldPosition, block, 1, this.numPlayersUsing);
             this.level.updateNeighborsAt(this.worldPosition, block);
         }
@@ -186,6 +204,9 @@ public class QuarryTE extends EnergeticTileEntity implements BlockEntityPacketHa
             compoundtag.putInt(nbt.toString(), string);
         });
         compound.put("RecipesUsed", compoundtag);
+        if (!this.trySaveLootTable(compound)) {
+            ContainerHelper.saveAllItems(compound, this.contents);
+        }
         return compound;
     }
 
@@ -198,7 +219,9 @@ public class QuarryTE extends EnergeticTileEntity implements BlockEntityPacketHa
         for (String s : compoundtag.getAllKeys()) {
             this.recipesUsed.put(new ResourceLocation(s), compoundtag.getInt(s));
         }
-
+        if (!this.tryLoadLootTable(compound)) {
+            ContainerHelper.loadAllItems(compound, this.contents);
+        }
     }
 
     //Getters/Setters

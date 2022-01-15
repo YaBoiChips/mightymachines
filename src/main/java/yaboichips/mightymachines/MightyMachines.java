@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 import yaboichips.mightymachines.common.tile.screens.CutterScreen;
 import yaboichips.mightymachines.common.tile.screens.GeneratorScreen;
 import yaboichips.mightymachines.common.tile.screens.ManualSmasherScreen;
+import yaboichips.mightymachines.common.tile.screens.QuarryScreen;
 import yaboichips.mightymachines.common.world.OreGenerator;
 import yaboichips.mightymachines.core.*;
 
@@ -56,6 +57,7 @@ public class MightyMachines {
         MenuScreens.register(MMContainers.GENERATOR, GeneratorScreen::new);
         MenuScreens.register(MMContainers.MANUAL_SMASHER, ManualSmasherScreen::new);
         MenuScreens.register(MMContainers.CUTTER, CutterScreen::new);
+        MenuScreens.register(MMContainers.QUARRY, QuarryScreen::new);
         MMKeybinds.register();
     }
 
@@ -87,7 +89,7 @@ public class MightyMachines {
             MMBlocks.blocks.forEach(block -> event.getRegistry().register(block));
             MMBlocks.blocks.clear();
             MMBlocks.blocks = null;
-            LOGGER.info("MM: Blocks egistered");
+            LOGGER.info("MM: Blocks registered");
         }
 
         @SubscribeEvent

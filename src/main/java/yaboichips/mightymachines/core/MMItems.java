@@ -42,9 +42,11 @@ public class MMItems {
     public static final Item DEEPSLATE_BAUXITE_ORE = createBlockItem(MMBlocks.DEEPSLATE_BAUXITE_ORE, new Item.Properties().tab(TAB));
     public static final Item DEEPSLATE_TIN_ORE = createBlockItem(MMBlocks.DEEPSLATE_TIN_ORE, new Item.Properties().tab(TAB));
 
+    public static final Item THALLIUM_BLOCK = createBlockItem(MMBlocks.THALLIUM_BLOCK, new Item.Properties().tab(TAB));
+    public static final Item ALUMINIUM_BLOCK = createBlockItem(MMBlocks.ALUMINIUM_BLOCK, new Item.Properties().tab(TAB));
+    public static final Item TIN_BLOCK = createBlockItem(MMBlocks.TIN_BLOCK, new Item.Properties().tab(TAB));
 
     public static final Item RUBY = createItem(new Item(new Item.Properties().tab(TAB)), "ruby");
-    public static final Item AMETHYST = createItem(new Item(new Item.Properties().tab(TAB)), "amethyst");
     public static final Item SAPPHIRE = createItem(new Item(new Item.Properties().tab(TAB)), "sapphire");
     public static final Item TOPAZ = createItem(new Item(new Item.Properties().tab(TAB)), "topaz");
     public static final Item OPAL = createItem(new Item(new Item.Properties().tab(TAB)), "opal");
@@ -89,6 +91,8 @@ public class MMItems {
     public static final Item MANUAL_SMASHER = createBlockItem(MMBlocks.MANUAL_SMASHER, new Item.Properties().tab(TAB));
     public static final Item SMASHER = createBlockItem(MMBlocks.SMASHER, new Item.Properties().tab(TAB));
     public static final Item CUTTER = createBlockItem(MMBlocks.CUTTER, new Item.Properties().tab(TAB));
+    public static final Item QUARRY = createBlockItem(MMBlocks.QUARRY, new Item.Properties().tab(TAB));
+
 
     public static Item createItem(Item item, String id) {
         return createItem(item, MightyMachines.createResource(id));

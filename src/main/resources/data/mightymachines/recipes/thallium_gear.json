@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:cutting",
+  "base": {
+    "item": "mightymachines:thallium_plate"
+  },
+
+  "result": {
+    "item": "mightymachines:thallium_gear"
+  }
+}

@@ -5,10 +5,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import yaboichips.mightymachines.MightyMachines;
-import yaboichips.mightymachines.common.blocks.CutterBlock;
-import yaboichips.mightymachines.common.blocks.GeneratorBlock;
-import yaboichips.mightymachines.common.blocks.ManualSmasherBlock;
-import yaboichips.mightymachines.common.blocks.SmasherBlock;
+import yaboichips.mightymachines.common.blocks.*;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -29,6 +26,11 @@ public class MMBlocks {
     public static final Block BAUXITE_ORE = createOreBlock("bauxite_ore");
     public static final Block TIN_ORE = createOreBlock("tin_ore");
 
+    public static final Block THALLIUM_BLOCK = createMetalBlock("thallium_block");
+    public static final Block ALUMINIUM_BLOCK = createMetalBlock("aluminium_block");
+    public static final Block TIN_BLOCK = createMetalBlock("tin_block");
+
+
     public static final Block DEEPSLATE_RUBY_ORE = createDeepslateOreBlock("deepslate_ruby_ore");
     public static final Block DEEPSLATE_SAPPHIRE_ORE = createDeepslateOreBlock("deepslate_sapphire_ore");
     public static final Block DEEPSLATE_TOPAZ_ORE = createDeepslateOreBlock("deepslate_topaz_ore");
@@ -44,6 +46,8 @@ public class MMBlocks {
     public static final Block MANUAL_SMASHER = registerBlock("manual_smasher", new ManualSmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block SMASHER = registerBlock("smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block CUTTER = registerBlock("cutter", new CutterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final Block QUARRY = registerBlock("quarry", new QuarryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+
 
 
     static @Nonnull
@@ -55,6 +59,11 @@ public class MMBlocks {
     static @Nonnull
     Block createDeepslateOreBlock(String id) {
         Block stone = new Block(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_IRON_ORE));
+        return registerBlock(id, stone);
+    }
+    static @Nonnull
+    Block createMetalBlock(String id) {
+        Block stone = new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK));
         return registerBlock(id, stone);
     }
 

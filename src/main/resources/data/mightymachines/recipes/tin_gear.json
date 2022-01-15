@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:cutting",
+  "base": {
+    "item": "mightymachines:tin_plate"
+  },
+
+  "result": {
+    "item": "mightymachines:tin_gear"
+  }
+}

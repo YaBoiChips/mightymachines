@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -219,6 +220,9 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
             compoundtag.putInt(nbt.toString(), string);
         });
         compound.put("RecipesUsed", compoundtag);
+        if (!this.trySaveLootTable(compound)) {
+            ContainerHelper.saveAllItems(compound, this.contents);
+        }
         return compound;
     }
 
@@ -231,6 +235,10 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
         CompoundTag compoundtag = compound.getCompound("RecipesUsed");
         for (String s : compoundtag.getAllKeys()) {
             this.recipesUsed.put(new ResourceLocation(s), compoundtag.getInt(s));
+        }
+        this.contents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        if (!this.tryLoadLootTable(compound)) {
+            ContainerHelper.loadAllItems(compound, this.contents);
         }
     }
 

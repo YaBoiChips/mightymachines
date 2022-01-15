@@ -1,0 +1,10 @@
+{
+  "type": "mightymachines:cutting",
+  "base": {
+    "item": "mightymachines:gold_plate"
+  },
+
+  "result": {
+    "item": "mightymachines:gold_gear"
+  }
+}
