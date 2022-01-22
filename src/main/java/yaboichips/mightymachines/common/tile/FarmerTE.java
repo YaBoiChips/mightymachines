@@ -72,7 +72,6 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
         world.sendBlockUpdated(tile.getBlockPos(), world.getBlockState(tile.getBlockPos()), world.getBlockState(tile.getBlockPos()), 2);
         harvest(world, pos, tile);
         suckItems(world, pos, tile);
-        System.out.println(tile.energyStorage.getEnergyStored());
     }
 
     public static void harvest(Level world, BlockPos pos, FarmerTE tile) {
@@ -224,7 +223,23 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
         }
     }
 
-    //nbt
+    /****************************** NBT START **********************************/
+
+    public void saving(CompoundTag compound) {
+        super.saveAdditional(compound);
+        compound.putInt("Work", this.getWork());
+        compound.putInt("Energy", this.energyStorage.getEnergyStored());
+        ContainerHelper.saveAllItems(compound, this.contents);
+    }
+
+    private void loading(CompoundTag nbt) {
+        this.contents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        this.setWork(nbt.getInt("Work"));
+        if (!this.tryLoadLootTable(nbt)) {
+            ContainerHelper.loadAllItems(nbt, this.contents);
+        }
+    }
+
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTag = super.getUpdateTag();
@@ -243,7 +258,6 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
         load(packet.getTag());
     }
 
-
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         CompoundTag tag = new CompoundTag();
@@ -258,27 +272,10 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
         super.onDataPacket(net, pkt);
     }
 
-    public void saving(CompoundTag compound) {
-        super.saveAdditional(compound);
-        compound.putInt("Work", this.getWork());
-        compound.putInt("Energy", this.energyStorage.getEnergyStored());
-        ContainerHelper.saveAllItems(compound, this.contents);
-    }
-
-    private void loading(CompoundTag nbt) {
-        this.contents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        this.setWork(nbt.getInt("Work"));
-        if (!this.tryLoadLootTable(nbt)) {
-            ContainerHelper.loadAllItems(nbt, this.contents);
-        }
-    }
-
     @Override
     public void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
-        compound.putInt("Work", this.getWork());
-        compound.putInt("Energy", this.energyStorage.getEnergyStored());
-        ContainerHelper.saveAllItems(compound, this.contents);
+       saving(compound);
     }
 
 
@@ -291,6 +288,7 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
         super.load(compound);
     }
 
+    /****************************** NBT END **********************************/
 
 
     private final ContainerData dataAccess = new ContainerData() {
