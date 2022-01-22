@@ -36,6 +36,7 @@ import yaboichips.mightymachines.common.tile.menus.CutterMenu;
 import yaboichips.mightymachines.core.MMBlockEntities;
 import yaboichips.mightymachines.core.MMRecipes;
 import yaboichips.mightymachines.util.BlockEntityPacketHandler;
+import yaboichips.mightymachines.util.MachineEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,11 +50,10 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
     private final IItemHandlerModifiable items = createHandler();
     public boolean working;
     protected int numPlayersUsing;
-    private int energy;
     private int work;
     private NonNullList<ItemStack> contents = NonNullList.withSize(2, ItemStack.EMPTY);
     private final LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
-    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
+    private final MachineEnergyStorage energyStorage = new MachineEnergyStorage(getMaxEnergyStored(), getMaxTransfer());
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     public CutterTE(BlockPos pos, BlockState state) {
@@ -117,7 +117,7 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     @Override
     public void addEnergy(int energy) {
-        this.energy += energy;
+        this.energyStorage.setEnergyStored(getEnergyStored() + energy);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return itemHandler.cast();
         }
-        if (capability == CapabilityEnergy.ENERGY){
+        if (capability == CapabilityEnergy.ENERGY) {
             return energyHandler.cast();
         }
         return super.getCapability(capability, side);
@@ -210,8 +210,8 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putBoolean("Working", this.isWorking());
         compound.putInt("Energy", this.getEnergy());
         compound.putInt("Work", this.getWork());
@@ -220,10 +220,7 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
             compoundtag.putInt(nbt.toString(), string);
         });
         compound.put("RecipesUsed", compoundtag);
-        if (!this.trySaveLootTable(compound)) {
-            ContainerHelper.saveAllItems(compound, this.contents);
-        }
-        return compound;
+        ContainerHelper.saveAllItems(compound, this.contents);
     }
 
     @Override
@@ -320,7 +317,7 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     @Override
     public void setEnergyStored(int energy) {
-        this.energy = energy;
+        this.energyStorage.setEnergyStored(energy);
     }
 
     @Override
@@ -339,10 +336,10 @@ public class CutterTE extends EnergeticTileEntity implements BlockEntityPacketHa
     }
 
     public int getEnergy() {
-        return energy;
+        return energyStorage.getEnergyStored();
     }
 
     public void setEnergy(int energy) {
-        this.energy = energy;
+        this.energyStorage.setEnergyStored(energy);
     }
 }

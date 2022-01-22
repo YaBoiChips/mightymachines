@@ -92,6 +92,7 @@ public class MMItems {
     public static final Item SMASHER = createBlockItem(MMBlocks.SMASHER, new Item.Properties().tab(TAB));
     public static final Item CUTTER = createBlockItem(MMBlocks.CUTTER, new Item.Properties().tab(TAB));
     public static final Item QUARRY = createBlockItem(MMBlocks.QUARRY, new Item.Properties().tab(TAB));
+    public static final Item FARMER = createBlockItem(MMBlocks.FARMER, new Item.Properties().tab(TAB));
 
 
     public static Item createItem(Item item, String id) {

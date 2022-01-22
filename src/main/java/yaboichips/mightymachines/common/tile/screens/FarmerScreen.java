@@ -6,17 +6,18 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import yaboichips.mightymachines.MightyMachines;
-import yaboichips.mightymachines.common.tile.menus.CutterMenu;
-import yaboichips.mightymachines.common.tile.menus.QuarryMenu;
+import yaboichips.mightymachines.common.gui.EnergyBar;
+import yaboichips.mightymachines.common.tile.FarmerTE;
+import yaboichips.mightymachines.common.tile.menus.FarmerMenu;
 
-public class QuarryScreen extends AbstractContainerScreen<QuarryMenu> {
+public class FarmerScreen extends AbstractContainerScreen<FarmerMenu> {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
+    private final EnergyBar energy;
 
-
-    public QuarryScreen(QuarryMenu screenContainer, Inventory inv, Component titleIn) {
+    public FarmerScreen(FarmerMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
+        this.energy = new EnergyBar(this, FarmerTE.MAX_ENERGY);
         this.leftPos = 0;
         this.topPos = 0;
         this.imageWidth = 175;
@@ -28,14 +29,25 @@ public class QuarryScreen extends AbstractContainerScreen<QuarryMenu> {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
+        energy.renderHoveredToolTip(matrixStack, mouseX, mouseY, menu.getEnergy());
+        System.out.println(menu.getEnergy());
     }
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.clearColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-        int x = (this.width - this.getXSize()) / 2;
-        int y = (this.height - this.getYSize()) / 2;
-        this.blit(matrixStack, x, y, 0, 0, this.getXSize(), this.getYSize());
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, x, y, 0, 0, this.imageWidth, 125);
+        this.blit(matrixStack, x, y + 125, 0, 126, this.imageWidth, 96);
+        energy.draw(matrixStack, menu.getEnergy());
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        energy.guiLeft = leftPos;
+        energy.guiTop = topPos;
     }
 }

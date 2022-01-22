@@ -31,20 +31,19 @@ import yaboichips.mightymachines.common.tile.menus.GeneratorMenu;
 import yaboichips.mightymachines.core.MMBlockEntities;
 import yaboichips.mightymachines.core.MMItems;
 import yaboichips.mightymachines.util.BlockEntityPacketHandler;
+import yaboichips.mightymachines.util.MachineEnergyStorage;
 
 import javax.annotation.Nonnull;
 
 public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacketHandler {
 
-
     private final IItemHandlerModifiable items = createHandler();
     public int fuel;
     public int cooldown;
-    public int energy;
     protected int numPlayersUsing;
     private NonNullList<ItemStack> contents = NonNullList.withSize(1, ItemStack.EMPTY);
     private final LazyOptional<IItemHandlerModifiable> itemHandler = LazyOptional.of(() -> items);
-    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
+    private final MachineEnergyStorage energyStorage = new MachineEnergyStorage(getMaxEnergyStored(), getMaxTransfer());
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
 
@@ -102,7 +101,7 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
 
     @Override
     public int getEnergyStored() {
-        return energy;
+        return energyStorage.getEnergyStored();
     }
 
     @Override
@@ -121,9 +120,9 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
     }
 
     public void consumePower(int energy) {
-        this.energy -= energy;
-        if (this.energy < 0) {
-            this.energy = 0;
+        this.energyStorage.setEnergyStored(this.energyStorage.getEnergyStored() - energy);
+        if (this.energyStorage.getEnergyStored() < 0) {
+            this.energyStorage.setEnergyStored(0);
         }
     }
 
@@ -255,32 +254,24 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("Fuel", this.getFuel());
         compound.putInt("Cooldown", this.getCooldown());
         compound.putInt("Energy", this.getEnergy());
-        if (!this.trySaveLootTable(compound)) {
-            ContainerHelper.saveAllItems(compound, this.contents);
-        }
-        return compound;
+        ContainerHelper.saveAllItems(compound, this.contents);
     }
 
     @Override
     public void load(CompoundTag compound) {
         super.load(compound);
+        System.out.println("i have loaded");
         this.setFuel(compound.getInt("Fuel"));
         this.setCooldown(compound.getInt("Cooldown"));
         this.setEnergy(compound.getInt("Energy"));
+        this.contents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         if (!this.tryLoadLootTable(compound)) {
             ContainerHelper.loadAllItems(compound, this.contents);
-        }
-    }
-
-    public void generatePower(int energy) {
-        this.energy += energy;
-        if (this.energy > getMaxEnergyStored()) {
-            this.energy = getMaxEnergyStored();
         }
     }
 
@@ -307,11 +298,11 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
     }
 
     public int getEnergy() {
-        return energy;
+        return energyStorage.getEnergyStored();
     }
 
     public void setEnergy(int energy) {
-        this.energy = energy;
+        this.energyStorage.setEnergyStored(energy);
     }
 
     public boolean hasFuel() {

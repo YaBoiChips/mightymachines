@@ -21,10 +21,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import yaboichips.mightymachines.common.tile.screens.CutterScreen;
-import yaboichips.mightymachines.common.tile.screens.GeneratorScreen;
-import yaboichips.mightymachines.common.tile.screens.ManualSmasherScreen;
-import yaboichips.mightymachines.common.tile.screens.QuarryScreen;
+import yaboichips.mightymachines.common.tile.screens.*;
 import yaboichips.mightymachines.common.world.OreGenerator;
 import yaboichips.mightymachines.core.*;
 
@@ -58,13 +55,13 @@ public class MightyMachines {
         MenuScreens.register(MMContainers.MANUAL_SMASHER, ManualSmasherScreen::new);
         MenuScreens.register(MMContainers.CUTTER, CutterScreen::new);
         MenuScreens.register(MMContainers.QUARRY, QuarryScreen::new);
+        MenuScreens.register(MMContainers.FARMER, FarmerScreen::new);
         MMKeybinds.register();
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("HELLO FROM PREINIT");
         OreGenerator.registerOre();
-        LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

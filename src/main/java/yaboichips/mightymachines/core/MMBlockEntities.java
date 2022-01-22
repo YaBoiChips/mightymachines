@@ -20,6 +20,7 @@ public class MMBlockEntities {
     public static final BlockEntityType<SmasherTE> SMASHER = register("smasher", BlockEntityType.Builder.of(SmasherTE::new, MMBlocks.SMASHER));
     public static final BlockEntityType<CutterTE> CUTTER = register("cutter", BlockEntityType.Builder.of(CutterTE::new, MMBlocks.CUTTER));
     public static final BlockEntityType<QuarryTE> QUARRY = register("quarry", BlockEntityType.Builder.of(QuarryTE::new, MMBlocks.QUARRY));
+    public static final BlockEntityType<FarmerTE> FARMER = register("farmer", BlockEntityType.Builder.of(FarmerTE::new, MMBlocks.FARMER));
 
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String key, BlockEntityType.Builder<T> builder) {

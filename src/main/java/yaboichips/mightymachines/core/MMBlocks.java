@@ -47,6 +47,7 @@ public class MMBlocks {
     public static final Block SMASHER = registerBlock("smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block CUTTER = registerBlock("cutter", new CutterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block QUARRY = registerBlock("quarry", new QuarryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final Block FARMER = registerBlock("farmer", new FarmerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
 
 

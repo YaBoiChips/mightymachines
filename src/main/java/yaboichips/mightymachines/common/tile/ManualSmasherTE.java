@@ -181,18 +181,15 @@ public class ManualSmasherTE extends RandomizableContainerBlockEntity implements
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("Work", this.getWork());
         CompoundTag compoundtag = new CompoundTag();
         this.recipesUsed.forEach((nbt, string) -> {
             compoundtag.putInt(nbt.toString(), string);
         });
         compound.put("RecipesUsed", compoundtag);
-        if (!this.trySaveLootTable(compound)) {
-            ContainerHelper.saveAllItems(compound, this.contents);
-        }
-        return compound;
+        ContainerHelper.saveAllItems(compound, this.contents);
     }
 
     @Override

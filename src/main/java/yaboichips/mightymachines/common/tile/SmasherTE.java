@@ -36,6 +36,7 @@ import yaboichips.mightymachines.common.tile.menus.ManualSmasherMenu;
 import yaboichips.mightymachines.core.MMBlockEntities;
 import yaboichips.mightymachines.core.MMRecipes;
 import yaboichips.mightymachines.util.BlockEntityPacketHandler;
+import yaboichips.mightymachines.util.MachineEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,10 +48,9 @@ public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketH
     private final RecipeType<? extends SmashingRecipe> recipeType;
     private final Object2IntOpenHashMap<ResourceLocation> recipesUsed = new Object2IntOpenHashMap<>();
     private final IItemHandlerModifiable items = createHandler();
-    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
+    private final MachineEnergyStorage energyStorage = new MachineEnergyStorage(getMaxEnergyStored(), getMaxTransfer());
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
     public int work;
-    private int energy;
 
     protected int numPlayersUsing;
     private NonNullList<ItemStack> contents = NonNullList.withSize(2, ItemStack.EMPTY);
@@ -66,7 +66,6 @@ public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketH
     public static void tick(Level world, BlockPos pos, BlockState state, SmasherTE tile) {
         makePlates(tile, world);
         working(tile);
-        System.out.println(tile.energy);
     }
 
     public static void makePlates(SmasherTE tile, Level world) {
@@ -158,7 +157,7 @@ public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketH
 
     @Override
     public void addEnergy(int energy) {
-        this.energy += energy;
+        this.energyStorage.setEnergyStored(getEnergyStored() + energy);
     }
 
 
@@ -204,19 +203,16 @@ public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketH
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
-        compound.putInt("Work", this.getWork());
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("Energy", this.getEnergy());
+        compound.putInt("Work", this.getWork());
         CompoundTag compoundtag = new CompoundTag();
         this.recipesUsed.forEach((nbt, string) -> {
             compoundtag.putInt(nbt.toString(), string);
         });
         compound.put("RecipesUsed", compoundtag);
-        if (!this.trySaveLootTable(compound)) {
-            ContainerHelper.saveAllItems(compound, this.contents);
-        }
-        return compound;
+        ContainerHelper.saveAllItems(compound, this.contents);
     }
 
     @Override
@@ -302,7 +298,7 @@ public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketH
 
     @Override
     public void setEnergyStored(int energy) {
-        this.energy = energy;
+        this.energyStorage.setEnergyStored(energy);
     }
 
     @Override
@@ -321,10 +317,10 @@ public class SmasherTE extends EnergeticTileEntity implements BlockEntityPacketH
     }
 
     public int getEnergy() {
-        return energy;
+        return energyStorage.getEnergyStored();
     }
 
     public void setEnergy(int energy) {
-        this.energy = energy;
+        this.energyStorage.setEnergyStored(energy);
     }
 }

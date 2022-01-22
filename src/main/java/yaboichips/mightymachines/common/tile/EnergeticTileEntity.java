@@ -17,13 +17,13 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+import yaboichips.mightymachines.util.MachineEnergyStorage;
 
 import javax.annotation.Nullable;
 
 public class EnergeticTileEntity extends RandomizableContainerBlockEntity implements IEnergyStorage {
 
-    private int energy;
-    private final EnergyStorage energyStorage = new EnergyStorage(getMaxEnergyStored(), getMaxTransfer());
+    private final MachineEnergyStorage energyStorage = new MachineEnergyStorage(getMaxEnergyStored(), getMaxTransfer());
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
     protected EnergeticTileEntity(BlockEntityType<?> p_155629_, BlockPos p_155630_, BlockState p_155631_) {
@@ -70,15 +70,15 @@ public class EnergeticTileEntity extends RandomizableContainerBlockEntity implem
 
     @Override
     public int getEnergyStored() {
-        return energy;
+        return energyStorage.getEnergyStored();
     }
 
     public void setEnergyStored(int energy) {
-        this.energy = energy;
+        this.energyStorage.setEnergyStored(energy);
     }
 
     public void addEnergy(int energy) {
-        this.energy += energy;
+        this.energyStorage.setEnergyStored(getEnergyStored() + energy);
     }
 
     @Override
