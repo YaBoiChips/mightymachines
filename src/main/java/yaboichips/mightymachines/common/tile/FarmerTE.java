@@ -69,6 +69,7 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
         if (tile.getEnergy() >= tile.getMaxEnergyStored()){
             tile.setEnergy(tile.getMaxEnergyStored());
         }
+        System.out.println(tile.getEnergy());
         world.sendBlockUpdated(tile.getBlockPos(), world.getBlockState(tile.getBlockPos()), world.getBlockState(tile.getBlockPos()), 2);
         harvest(world, pos, tile);
         suckItems(world, pos, tile);
@@ -235,6 +236,9 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
     private void loading(CompoundTag nbt) {
         this.contents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         this.setWork(nbt.getInt("Work"));
+        if(nbt.contains("Energy", Tag.TAG_INT) && this.level.isClientSide) {
+            this.energyStorage.setEnergyStored(nbt.getInt("Energy"));
+        }
         if (!this.tryLoadLootTable(nbt)) {
             ContainerHelper.loadAllItems(nbt, this.contents);
         }
@@ -282,9 +286,6 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
     @Override
     public void load(CompoundTag compound) {
         loading(compound);
-        if(compound.contains("Energy", Tag.TAG_INT)) {
-            this.energyStorage = new MachineEnergyStorage(getMaxEnergyStored(), getMaxTransfer(), compound.getInt("Energy"));
-        }
         super.load(compound);
     }
 
@@ -295,14 +296,14 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
         @Override
         public int get(int index) {
             if (index == 0) {
-                return FarmerTE.this.energyStorage.getEnergyStored();
+                return FarmerTE.this.getEnergy();
             }
             return 0;
         }
         @Override
         public void set(int index, int value) {
             if (index == 0) {
-                FarmerTE.this.energyStorage.setEnergyStored(value);
+                FarmerTE.this.setEnergy(value);
             }
         }
         @Override
