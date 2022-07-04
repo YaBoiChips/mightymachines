@@ -5,6 +5,8 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import yaboichips.mightymachines.core.MMContainers;
@@ -12,14 +14,16 @@ import yaboichips.mightymachines.core.MMContainers;
 public class GeneratorMenu extends AbstractContainerMenu {
 
     public final Container inventory;
+    public ContainerData data;
 
     public GeneratorMenu(int windowId, Inventory playerInv) {
-        this(windowId, playerInv, new SimpleContainer(1));
+        this(windowId, playerInv, new SimpleContainer(1), new SimpleContainerData(2));
     }
 
-    public GeneratorMenu(int windowId, Inventory playerInv, Container inventory) {
+    public GeneratorMenu(int windowId, Inventory playerInv, Container inventory, ContainerData data) {
         super(MMContainers.GENERATOR, windowId);
         checkContainerSize(inventory, 1);
+        this.data = data;
         this.inventory = inventory;
         inventory.startOpen(playerInv.player);
 
@@ -39,6 +43,11 @@ public class GeneratorMenu extends AbstractContainerMenu {
         for (int column = 0; column < 9; column++) {
             this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 142));
         }
+        addDataSlots(data);
+    }
+
+    public int getEnergy() {
+        return data.get(0);
     }
 
     @Override

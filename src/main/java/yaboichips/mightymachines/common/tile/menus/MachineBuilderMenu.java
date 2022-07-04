@@ -5,28 +5,27 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.RecipeBookMenu;
-import net.minecraft.world.inventory.RecipeBookType;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import yaboichips.mightymachines.core.MMContainers;
 
-public class ManualSmasherMenu extends RecipeBookMenu {
+public class MachineBuilderMenu extends RecipeBookMenu {
 
     public final Container container;
+    public final ContainerData energy;
     protected final Level level;
 
 
-    public ManualSmasherMenu(int windowId, Inventory playerInv) {
-        this(windowId, playerInv, new SimpleContainer(2));
+    public MachineBuilderMenu(int windowId, Inventory playerInv) {
+        this(windowId, playerInv, new SimpleContainer(2), new SimpleContainerData(2));
     }
 
-    public ManualSmasherMenu(int windowId, Inventory playerInv, Container inventory) {
-        super(MMContainers.MANUAL_SMASHER, windowId);
+    public MachineBuilderMenu(int windowId, Inventory playerInv, Container inventory, ContainerData data) {
+        super(MMContainers.BUILDER, windowId);
         checkContainerSize(inventory, 2);
+        this.energy = data;
         this.container = inventory;
         inventory.startOpen(playerInv.player);
         level = playerInv.player.level;
@@ -48,6 +47,11 @@ public class ManualSmasherMenu extends RecipeBookMenu {
         for (int column = 0; column < 9; column++) {
             this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 142));
         }
+        this.addDataSlots(data);
+    }
+
+    public ContainerData getEnergy(){
+        return this.energy;
     }
 
     @Override

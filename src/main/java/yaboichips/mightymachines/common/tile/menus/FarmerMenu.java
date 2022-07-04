@@ -1,5 +1,6 @@
 package yaboichips.mightymachines.common.tile.menus;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,10 +17,10 @@ public class FarmerMenu extends AbstractContainerMenu {
 
     public final Container container;
     public final ContainerData energy;
-    protected final Level level;
+    public final Level level;
 
     public FarmerMenu(int windowId, Inventory playerInv) {
-        this(windowId, playerInv, new SimpleContainer(54), new SimpleContainerData(1));
+        this(windowId, playerInv, new SimpleContainer(54), new SimpleContainerData(2));
     }
 
     public FarmerMenu(int windowId, Inventory playerInv, Container inventory, ContainerData energy) {
@@ -46,10 +47,12 @@ public class FarmerMenu extends AbstractContainerMenu {
         for(int i1 = 0; i1 < 9; ++i1) {
             this.addSlot(new Slot(playerInv, i1, 8 + i1 * 18, 161 + i));
         }
+        this.addDataSlots(energy);
     }
 
-    public int getEnergy(){
-        return this.energy.get(0);
+
+    public ContainerData getEnergy(){
+        return this.energy;
     }
 
     @Override
@@ -82,6 +85,7 @@ public class FarmerMenu extends AbstractContainerMenu {
     public void removed(Player playerIn) {
         super.removed(playerIn);
     }
+
 
     public static class ResultSlot extends Slot {
         public ResultSlot(Container container, int x, int y, int z) {

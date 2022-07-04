@@ -16,11 +16,8 @@ public class MMBlockEntities {
     public static List<BlockEntityType<?>> blockentity = new ArrayList<>();
 
     public static final BlockEntityType<GeneratorTE> GENERATOR = register("generator", BlockEntityType.Builder.of(GeneratorTE::new, MMBlocks.GENERATOR));
-    public static final BlockEntityType<ManualSmasherTE> MANUAL_SMASHER = register("manual_smasher", BlockEntityType.Builder.of(ManualSmasherTE::new, MMBlocks.MANUAL_SMASHER));
-    public static final BlockEntityType<SmasherTE> SMASHER = register("smasher", BlockEntityType.Builder.of(SmasherTE::new, MMBlocks.SMASHER));
-    public static final BlockEntityType<CutterTE> CUTTER = register("cutter", BlockEntityType.Builder.of(CutterTE::new, MMBlocks.CUTTER));
-    public static final BlockEntityType<QuarryTE> QUARRY = register("quarry", BlockEntityType.Builder.of(QuarryTE::new, MMBlocks.QUARRY));
     public static final BlockEntityType<FarmerTE> FARMER = register("farmer", BlockEntityType.Builder.of(FarmerTE::new, MMBlocks.FARMER));
+    public static final BlockEntityType<MachineBuilderTE> BUILDER = register("machine_builder", BlockEntityType.Builder.of(MachineBuilderTE::new, MMBlocks.MACHINE_BUILDER));
 
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String key, BlockEntityType.Builder<T> builder) {

@@ -7,15 +7,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import yaboichips.mightymachines.MightyMachines;
+import yaboichips.mightymachines.common.gui.EnergyBar;
+import yaboichips.mightymachines.common.tile.FarmerTE;
+import yaboichips.mightymachines.common.tile.GeneratorTE;
 import yaboichips.mightymachines.common.tile.menus.GeneratorMenu;
 
 public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(MightyMachines.MOD_ID, "textures/gui/generator.png");
-
+    private EnergyBar energy;
 
     public GeneratorScreen(GeneratorMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
+        this.energy = new EnergyBar(this, GeneratorTE.MAX_ENERGY);
         this.leftPos = 0;
         this.topPos = 0;
         this.imageWidth = 175;
@@ -27,6 +31,7 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
+        energy.renderHoveredToolTip(matrixStack, mouseX, mouseY, this.menu.getEnergy());
     }
 
     @Override
@@ -36,5 +41,12 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
         int x = (this.width - this.getXSize()) / 2;
         int y = (this.height - this.getYSize()) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.getXSize(), this.getYSize());
+        energy.draw(matrixStack, this.menu.getEnergy());
+    }
+    @Override
+    protected void init() {
+        super.init();
+        energy.guiLeft = leftPos;
+        energy.guiTop = topPos;
     }
 }

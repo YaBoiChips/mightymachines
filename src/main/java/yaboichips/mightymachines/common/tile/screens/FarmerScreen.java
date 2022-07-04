@@ -29,8 +29,8 @@ public class FarmerScreen extends AbstractContainerScreen<FarmerMenu> {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
-        energy.renderHoveredToolTip(matrixStack, mouseX, mouseY, menu.getEnergy());
-        System.out.println(menu.getEnergy());
+        energy.renderHoveredToolTip(matrixStack, mouseX, mouseY, this.menu.getEnergy().get(0));
+
     }
 
     @Override
@@ -41,7 +41,7 @@ public class FarmerScreen extends AbstractContainerScreen<FarmerMenu> {
         int y = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.imageWidth, 125);
         this.blit(matrixStack, x, y + 125, 0, 126, this.imageWidth, 96);
-        energy.draw(matrixStack, menu.getEnergy());
+        energy.draw(matrixStack, this.menu.getEnergy().get(0));
     }
 
     @Override

@@ -13,36 +13,29 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import yaboichips.mightymachines.common.tile.CutterTE;
+import yaboichips.mightymachines.common.tile.MachineBuilderTE;
 import yaboichips.mightymachines.core.MMBlockEntities;
-import yaboichips.mightymachines.core.MMItems;
 
 import javax.annotation.Nullable;
 
-public class CutterBlock extends BaseEntityBlock {
-    public CutterBlock(Properties properties) {
+public class MachineBuilderBlock extends BaseEntityBlock {
+    public MachineBuilderBlock(Properties properties) {
         super(properties);
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MMBlockEntities.CUTTER.create(pos, state);
+        return MMBlockEntities.BUILDER.create(pos, state);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        if (player.getItemInHand(hand).getItem() == MMItems.CRANK) {
-            CutterTE tile = (CutterTE) world.getBlockEntity(pos);
-            tile.setWork(tile.getWork() + 1);
-            return InteractionResult.SUCCESS;
-        } else {
-            if (!world.isClientSide) {
-                BlockEntity tile = world.getBlockEntity(pos);
-                if (tile instanceof CutterTE) {
-                    player.openMenu((CutterTE) tile);
-                    return InteractionResult.SUCCESS;
-                }
+        if (!world.isClientSide) {
+            BlockEntity tile = world.getBlockEntity(pos);
+            if (tile instanceof MachineBuilderTE) {
+                player.openMenu((MachineBuilderTE) tile);
+                return InteractionResult.SUCCESS;
             }
         }
         return InteractionResult.FAIL;
@@ -52,8 +45,8 @@ public class CutterBlock extends BaseEntityBlock {
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity te = worldIn.getBlockEntity(pos);
-            if (te instanceof CutterTE) {
-                Containers.dropContents(worldIn, pos, ((CutterTE) te).getItems());
+            if (te instanceof MachineBuilderTE) {
+                Containers.dropContents(worldIn, pos, ((MachineBuilderTE) te).getItems());
             }
             super.onRemove(state, worldIn, pos, newState, isMoving);
         }
@@ -68,6 +61,6 @@ public class CutterBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
-        return createTickerHelper(type, MMBlockEntities.CUTTER, CutterTE::tick);
+        return createTickerHelper(type, MMBlockEntities.BUILDER, MachineBuilderTE::tick);
     }
 }

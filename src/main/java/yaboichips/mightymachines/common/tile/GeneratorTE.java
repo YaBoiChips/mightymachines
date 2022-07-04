@@ -13,6 +13,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -37,6 +38,7 @@ import javax.annotation.Nonnull;
 
 public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacketHandler {
 
+    public static final int MAX_ENERGY = 10000;
     private final IItemHandlerModifiable items = createHandler();
     public int fuel;
     public int cooldown;
@@ -51,8 +53,26 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
         super(MMBlockEntities.GENERATOR, pos, state);
     }
 
+    private final ContainerData dataAccess = new ContainerData() {
+        @Override
+        public int get(int index) {
+            if (index == 0) {
+                return GeneratorTE.this.getEnergy();
+            }
+            return -1;
+        }
+        @Override
+        public void set(int index, int value) {
+            GeneratorTE.this.setEnergy(value);
+        }
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    };
+
     //Controllers
-    public static void tick(Level world, BlockPos p_155109_, BlockState state, GeneratorTE tile) {
+    public static void tick(Level world, BlockPos pos, BlockState state, GeneratorTE tile) {
         generateEnergy(world, tile);
         fuelGenerator(world, tile);
         tile.sendEnergy();
@@ -131,12 +151,15 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
             for (Direction facing : Direction.values()) {
                 BlockEntity tileEntity = level.getBlockEntity(getBlockPos().relative(facing));
                 if (tileEntity != null) {
-                    if (tileEntity.getCapability(CapabilityEnergy.ENERGY).isPresent()) {
-                        int sent = 10;
-                        ((EnergeticTileEntity) tileEntity).addEnergy(sent);
-                        this.consumePower(sent);
-                        if (this.getEnergyStored() <= 0) {
-                            break;
+                    if (tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).isPresent()) {
+                        IEnergyStorage handler = tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).orElse(null);
+                        if (handler.canReceive()) {
+                            int sent = 10;
+                            handler.receiveEnergy(sent, false);
+                            energyStorage.extractEnergy(sent, false);
+                            if (energyStorage.getEnergyStored() <= 0) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -163,7 +186,7 @@ public class GeneratorTE extends EnergeticTileEntity implements BlockEntityPacke
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
-        return new GeneratorMenu(id, player, this);
+        return new GeneratorMenu(id, player, this, dataAccess);
     }
 
     @Override

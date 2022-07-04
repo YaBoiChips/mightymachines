@@ -1,14 +1,21 @@
 package yaboichips.mightymachines;
 
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,15 +28,20 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import yaboichips.mightymachines.common.tile.screens.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import yaboichips.mightymachines.common.capabilities.IPackerCapability;
+import yaboichips.mightymachines.common.capabilities.PackerCap;
+import yaboichips.mightymachines.common.tile.screens.FarmerScreen;
+import yaboichips.mightymachines.common.tile.screens.GeneratorScreen;
+import yaboichips.mightymachines.common.tile.screens.MachineBuilderScreen;
 import yaboichips.mightymachines.common.world.OreGenerator;
 import yaboichips.mightymachines.core.*;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Collectors;
 
-// The value here should match an entry in the META-INF/mods.toml file
-@Mod("mightymachines")
+@Mod(MightyMachines.MOD_ID)
 public class MightyMachines {
 
     public static final String MOD_ID = "mightymachines";
@@ -52,11 +64,32 @@ public class MightyMachines {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         MenuScreens.register(MMContainers.GENERATOR, GeneratorScreen::new);
-        MenuScreens.register(MMContainers.MANUAL_SMASHER, ManualSmasherScreen::new);
-        MenuScreens.register(MMContainers.CUTTER, CutterScreen::new);
-        MenuScreens.register(MMContainers.QUARRY, QuarryScreen::new);
+        MenuScreens.register(MMContainers.BUILDER, MachineBuilderScreen::new);
         MenuScreens.register(MMContainers.FARMER, FarmerScreen::new);
         MMKeybinds.register();
+    }
+
+    @SubscribeEvent
+    public void attachCaps(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof Player player) {
+            System.out.println("pog");
+            IPackerCapability packer = new PackerCap(player);
+            if (MMBoolMap.hasPacker.get(player.getUUID()) != null) {
+                if (MMBoolMap.hasPacker.get(player.getUUID())) {
+                    event.addCapability(new ResourceLocation(MOD_ID, "packer"),
+                            new ICapabilityProvider() {
+                                @NotNull
+                                @Override
+                                public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+                                    if (cap == MMCapabilities.PACKER_CAPABILITY) {
+                                        return LazyOptional.of(() -> (T) packer);
+                                    }
+                                    return LazyOptional.empty();
+                                }
+                            });
+                }
+            }
+        }
     }
 
     private void setup(final FMLCommonSetupEvent event) {
@@ -76,6 +109,7 @@ public class MightyMachines {
                 map(m -> m.messageSupplier().get()).
                 collect(Collectors.toList()));
     }
+
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {

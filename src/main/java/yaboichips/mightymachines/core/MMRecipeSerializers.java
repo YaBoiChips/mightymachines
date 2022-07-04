@@ -2,8 +2,7 @@ package yaboichips.mightymachines.core;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import yaboichips.mightymachines.MightyMachines;
-import yaboichips.mightymachines.common.recipes.CuttingRecipe;
-import yaboichips.mightymachines.common.recipes.SmashingRecipe;
+import yaboichips.mightymachines.common.recipes.MachineBuildingRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -12,8 +11,7 @@ import java.util.List;
 public class MMRecipeSerializers {
     public static List<RecipeSerializer<?>> serializers = new ArrayList<>();
 
-    public static final RecipeSerializer<SmashingRecipe> SMASHING = register("smashing", new SmashingRecipe.Serializer());
-    public static final RecipeSerializer<CuttingRecipe> CUTTING = register("cutting", new CuttingRecipe.Serializer());
+    public static final RecipeSerializer<MachineBuildingRecipe> BUILDING = register("building", new MachineBuildingRecipe.Serializer());
 
 
     static @Nonnull

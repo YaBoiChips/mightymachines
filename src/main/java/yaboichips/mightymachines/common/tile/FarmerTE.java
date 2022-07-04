@@ -66,10 +66,9 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
 
     //Controllers
     public static void tick(Level world, BlockPos pos, BlockState state, FarmerTE tile) {
-        if (tile.getEnergy() >= tile.getMaxEnergyStored()){
+        if (tile.getEnergy() > tile.getMaxEnergyStored()){
             tile.setEnergy(tile.getMaxEnergyStored());
         }
-        System.out.println(tile.getEnergy());
         world.sendBlockUpdated(tile.getBlockPos(), world.getBlockState(tile.getBlockPos()), world.getBlockState(tile.getBlockPos()), 2);
         harvest(world, pos, tile);
         suckItems(world, pos, tile);
@@ -125,7 +124,6 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
             }
         }
     }
-
 
     //Container
     @Override
@@ -298,13 +296,11 @@ public class FarmerTE extends EnergeticTileEntity implements BlockEntityPacketHa
             if (index == 0) {
                 return FarmerTE.this.getEnergy();
             }
-            return 0;
+            return -1;
         }
         @Override
         public void set(int index, int value) {
-            if (index == 0) {
                 FarmerTE.this.setEnergy(value);
-            }
         }
         @Override
         public int getCount() {

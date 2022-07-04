@@ -7,19 +7,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import yaboichips.mightymachines.core.MMRecipeSerializers;
 import yaboichips.mightymachines.core.MMRecipes;
 
-public class CuttingRecipe implements Recipe<Container> {
+public class MachineBuildingRecipe implements Recipe<Container> {
 
     private final Ingredient base;
     private final ItemStack result;
     private final ResourceLocation recipeId;
 
-    public CuttingRecipe(ResourceLocation recipeId, Ingredient base, ItemStack result) {
+    public MachineBuildingRecipe(ResourceLocation recipeId, Ingredient base, ItemStack result) {
         this.recipeId = recipeId;
         this.base = base;
         this.result = result;
@@ -57,32 +58,32 @@ public class CuttingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return MMRecipeSerializers.CUTTING;
+        return MMRecipeSerializers.BUILDING;
     }
 
     @Override
     public RecipeType<?> getType() {
-        return MMRecipes.CUTTING;
+        return MMRecipes.BUILDING;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CuttingRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MachineBuildingRecipe> {
 
         @Override
-        public CuttingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public MachineBuildingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "base"));
             ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            return new CuttingRecipe(recipeId, ingredient, itemstack);
+            return new MachineBuildingRecipe(recipeId, ingredient, itemstack);
         }
 
         @Override
-        public CuttingRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buffer) {
+        public MachineBuildingRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             ItemStack itemstack = buffer.readItem();
-            return new CuttingRecipe(resourceLocation, ingredient, itemstack);
+            return new MachineBuildingRecipe(resourceLocation, ingredient, itemstack);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, CuttingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, MachineBuildingRecipe recipe) {
             recipe.base.toNetwork(buffer);
             buffer.writeItem(recipe.result);
         }

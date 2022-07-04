@@ -43,11 +43,8 @@ public class MMBlocks {
     public static final Block DEEPSLATE_TIN_ORE = createDeepslateOreBlock("deepslate_tin_ore");
 
     public static final Block GENERATOR = registerBlock("generator", new GeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
-    public static final Block MANUAL_SMASHER = registerBlock("manual_smasher", new ManualSmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
-    public static final Block SMASHER = registerBlock("smasher", new SmasherBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
-    public static final Block CUTTER = registerBlock("cutter", new CutterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
-    public static final Block QUARRY = registerBlock("quarry", new QuarryBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
     public static final Block FARMER = registerBlock("farmer", new FarmerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final Block MACHINE_BUILDER = registerBlock("machine_builder", new MachineBuilderBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
 
 

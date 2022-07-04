@@ -9,13 +9,12 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yaboichips.mightymachines.MightyMachines;
 import yaboichips.mightymachines.core.MMFeatures;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = MightyMachines.MOD_ID)
+@Mod.EventBusSubscriber()
 public class OreGenerator {
 
     private static final ArrayList<PlacedFeature> OVERWORLD_ORES = new ArrayList<>();

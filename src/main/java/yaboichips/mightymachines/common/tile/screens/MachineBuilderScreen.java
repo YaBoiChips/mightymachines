@@ -7,15 +7,20 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import yaboichips.mightymachines.MightyMachines;
-import yaboichips.mightymachines.common.tile.menus.CutterMenu;
+import yaboichips.mightymachines.common.gui.EnergyBar;
+import yaboichips.mightymachines.common.tile.FarmerTE;
+import yaboichips.mightymachines.common.tile.MachineBuilderTE;
+import yaboichips.mightymachines.common.tile.menus.MachineBuilderMenu;
 
-public class CutterScreen extends AbstractContainerScreen<CutterMenu> {
+public class MachineBuilderScreen extends AbstractContainerScreen<MachineBuilderMenu> {
 
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(MightyMachines.MOD_ID, "textures/gui/smasher.png");
+    private final EnergyBar energy;
 
 
-    public CutterScreen(CutterMenu screenContainer, Inventory inv, Component titleIn) {
+    public MachineBuilderScreen(MachineBuilderMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
+        this.energy = new EnergyBar(this, MachineBuilderTE.MAX_ENERGY);
         this.leftPos = 0;
         this.topPos = 0;
         this.imageWidth = 175;
@@ -27,6 +32,7 @@ public class CutterScreen extends AbstractContainerScreen<CutterMenu> {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
+        energy.renderHoveredToolTip(matrixStack, mouseX, mouseY, this.menu.getEnergy().get(0));
     }
 
     @Override
@@ -36,5 +42,13 @@ public class CutterScreen extends AbstractContainerScreen<CutterMenu> {
         int x = (this.width - this.getXSize()) / 2;
         int y = (this.height - this.getYSize()) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.getXSize(), this.getYSize());
+        energy.draw(matrixStack, this.menu.getEnergy().get(0));
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        energy.guiLeft = leftPos;
+        energy.guiTop = topPos;
     }
 }

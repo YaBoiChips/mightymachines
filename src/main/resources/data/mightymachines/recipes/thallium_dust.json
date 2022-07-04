@@ -1,10 +1,10 @@
 {
-  "type": "mightymachines:smashing",
+  "type": "mightymachines:building",
   "base": {
-    "item": "mightymachines:thallium_ore"
+    "item": "mightymachines:boots"
   },
 
   "result": {
-    "item": "mightymachines:thallium_dust"
+    "item": "mightymachines:boots"
   }
 }

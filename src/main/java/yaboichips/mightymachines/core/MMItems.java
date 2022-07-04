@@ -6,7 +6,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import yaboichips.mightymachines.MightyMachines;
+import yaboichips.mightymachines.common.items.Boots;
 import yaboichips.mightymachines.common.items.Jetpack;
+import yaboichips.mightymachines.common.items.PackingModule;
 import yaboichips.mightymachines.common.items.guns.*;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class MMItems {
     public static final Item THALLIUM_ORE = createBlockItem(MMBlocks.THALLIUM_ORE, new Item.Properties().tab(TAB));
     public static final Item BAUXITE_ORE = createBlockItem(MMBlocks.BAUXITE_ORE, new Item.Properties().tab(TAB));
     public static final Item TIN_ORE = createBlockItem(MMBlocks.TIN_ORE, new Item.Properties().tab(TAB));
+
+    public static final Item BOOTS = createItem(new Boots(ArmorMaterials.IRON, EquipmentSlot.FEET, new Item.Properties().tab(TAB)), "boots");
+
 
     public static final Item DEEPSLATE_RUBY_ORE = createBlockItem(MMBlocks.DEEPSLATE_RUBY_ORE, new Item.Properties().tab(TAB));
     public static final Item DEEPSLATE_SAPPHIRE_ORE = createBlockItem(MMBlocks.DEEPSLATE_SAPPHIRE_ORE, new Item.Properties().tab(TAB));
@@ -86,12 +91,10 @@ public class MMItems {
     public static final Item CRANK = createItem(new Item(new Item.Properties().tab(TAB)), "crank");
 
     public static final Item JETPACK = createItem(new Jetpack(ArmorMaterials.IRON, EquipmentSlot.CHEST, new Item.Properties().tab(TAB)), "jetpack");
+    public static final Item PACKING_MODULE = createItem(new PackingModule(new Item.Properties().tab(TAB)), "packing_module");
 
     public static final Item GENERATOR = createBlockItem(MMBlocks.GENERATOR, new Item.Properties().tab(TAB));
-    public static final Item MANUAL_SMASHER = createBlockItem(MMBlocks.MANUAL_SMASHER, new Item.Properties().tab(TAB));
-    public static final Item SMASHER = createBlockItem(MMBlocks.SMASHER, new Item.Properties().tab(TAB));
-    public static final Item CUTTER = createBlockItem(MMBlocks.CUTTER, new Item.Properties().tab(TAB));
-    public static final Item QUARRY = createBlockItem(MMBlocks.QUARRY, new Item.Properties().tab(TAB));
+    public static final Item MACHINE_BUILDER = createBlockItem(MMBlocks.MACHINE_BUILDER, new Item.Properties().tab(TAB));
     public static final Item FARMER = createBlockItem(MMBlocks.FARMER, new Item.Properties().tab(TAB));
 
 

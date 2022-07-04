@@ -12,9 +12,7 @@ public class MMContainers {
     public static List<MenuType<?>> containers = new ArrayList<>();
 
     public static final MenuType<GeneratorMenu> GENERATOR = register("generator", GeneratorMenu::new);
-    public static final MenuType<ManualSmasherMenu> MANUAL_SMASHER = register("manual_smasher", ManualSmasherMenu::new);
-    public static final MenuType<CutterMenu> CUTTER = register("cutter", CutterMenu::new);
-    public static final MenuType<QuarryMenu> QUARRY = register("quarry", QuarryMenu::new);
+    public static final MenuType<MachineBuilderMenu> BUILDER = register("builder", MachineBuilderMenu::new);
     public static final MenuType<FarmerMenu> FARMER = register("farmer", FarmerMenu::new);
 
 
